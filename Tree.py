@@ -14,7 +14,7 @@ class Node():
         if not self._isleaf:
             if len(children) != 2:
                 raise ValueError("A binary tree needs exactly two children")
-            self._children = tuple(c if isinstance(c,BinaryTree) else BinaryTree(c) for c in children)
+            self._children = tuple(c if isinstance(c,Node) else Node(c) for c in children)
         self._size = None
         
     def __repr__(self):

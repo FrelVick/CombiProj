@@ -26,6 +26,10 @@ class ConstantRule(AbstractRule):
     def count(self, i):
         ''' Return number of object of weight i '''
 
+    @abstractmethod
+    def list(self, i):
+        '''Return list of all objects of weight i'''
+
 class EpsilonRule(ConstantRule) :
     
     def __init__(self, obj):
@@ -38,10 +42,16 @@ class EpsilonRule(ConstantRule) :
     def count(self, i):
         if i < 0 : 
             raise ValueError("Weight must be positive or null")
-        elif i == 0:
+        if i == 0:
             return 1
-        else:
-            return 0
+        return 0
+
+    def list(self, i):
+        if i < 0:
+            raise ValueError("Weight must be positive or null")
+        if i == 0:
+            return [self._object]
+        return []
 
 class SingletonRule(ConstantRule) :
     
@@ -55,10 +65,17 @@ class SingletonRule(ConstantRule) :
     def count(self, i):
         if i < 0 : 
             raise ValueError("Weight must be positive or null")
-        elif i == 1:
+        if i == 1:
             return 1
-        else:
-            return 0
+        return 0
+    
+    def list(self, i):
+        if i < 0:
+            raise ValueError("Weight must be positive or null")
+        if i == 1:
+            return [self._object]
+        return []
+            
 
 class ConstructorRule(AbstractRule):
 
@@ -79,6 +96,9 @@ class ConstructorRule(AbstractRule):
     def count(self, i):
         ''' Return number of object of weight i '''
 
+    @abstractmethod
+    def list(self, i):
+        '''Return list of all objects of weight i'''
 
     def _update_valuation(self):
         v1 = self._grammar[self._parameters[0]].valuation()
@@ -100,6 +120,11 @@ class UnionRule(ConstructorRule):
         r0 = self._grammar[self._parameters[0]]
         r1 = self._grammar[self._parameters[1]]
         return r0.count(i) + r1.count(i)
+
+    def list(self, i):
+        fst, snd = self._parameters
+        fst, snd = self._grammar[fst], self._grammar[snd]
+        return fst.list(i) + snd.list(i)
 
 class ProductRule(ConstructorRule):
 
@@ -124,3 +149,22 @@ class ProductRule(ConstructorRule):
                 res += r1.count(i1) * r2.count(i - i1)
         return res
                 
+
+    def list(self, i):
+        fun = self._constructor
+        fst, snd = self._parameters
+        fst, snd = self._grammar[fst], self._grammar[snd]
+        l = []
+        v1 = fst.valuation()
+        v2 = snd.valuation()
+        for i1 in range (v1, i + 1):
+            if (i - i1 >= v2):
+                l1 = fst.list(i1)
+                l2 = snd.list(i - i1)
+                for x in l1:
+                    for y in l2:
+                        # print (x, y)
+                        # print ("ici", self._constructor([x, y]))
+                        l.append( self._constructor([x, y]))
+        return l
+
