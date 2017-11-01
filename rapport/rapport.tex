@@ -1,0 +1,351 @@
+\documentclass[a4paper, titlepage]{article}
+
+\usepackage[utf8]{inputenc} % accents
+\usepackage[T1]{fontenc}      % caractères français
+\usepackage{geometry}         % marges
+\usepackage[frenchb]{babel}  % langue
+\usepackage{graphicx}         % images
+\usepackage{verbatim}         % texte préformaté
+\usepackage{hhline}
+\usepackage{flafter} 
+
+\title{Rapport projet Combinatoire}      
+\author{-}         
+\date{-}          
+
+                              
+\begin{document}
+%% \maketitle
+
+\section{Réponses attendues pour la méthode count}
+Pour la grammaire des arbres :
+\begin{center}
+\begin{tabular}{|c||c|c|c|c|c|c|c|c|c|c|c|}
+\hline n & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+\hline
+\hline count(n, Tree) & 0 & 1 & 1 & 2 & 5 & 14 & 42 & 123 & 429 & 1430
+& 4862 \\
+\hline count(n, Node) & 0 & 0 & 1 & 2 & 5 & 14 & 42 & 123 & 429 & 1430 & 4862 \\
+\hline count(n, Leaf) & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+\end{center}
+
+Pour la grammaire des mots de Fibonacci :
+\begin{center}
+\begin{tabular}{|l||c|c|c|c|c|c|c|c|c|c|c|}
+\hline n & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+\hline
+\hline count(n, Fib) & 1 & 2 & 3 & 5 & 8 & 13 & 21 & 34 & 55 & 89 & 144 \\
+\hline count(n, Cas1) & 0 & 2 & 3 & 5 & 8 & 13 & 21 & 34 & 55 & 89 & 144 \\
+\hline count(n, Cas2) & 0 & 1 & 1 & 2 & 3 & 5 & 8 & 13 & 21 & 34 & 55\\
+\hline count(n, Vide) & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline count(n, CasAu) & 0 & 1 & 2 & 3 & 5 & 8 & 13 & 21 & 34 & 55 & 89\\
+\hline count(n, AtomA) & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline count(n, AtomB) & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline count(n, CasBAu) & 0 & 0 & 1 & 2 & 3 & 5 & 8 & 13 & 21 & 34 & 55\\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Grammaires}
+
+\subsection{Alphabet A,B}
+\medskip
+$ S\ =\ \mathcal{E}\ |\ AS\ |\ BS $ 
+
+$w$ est un mot de la grammaire $A$, $B$ si:
+\begin{itemize}
+\item soit $w$ est vide
+\item soit $w$ est de la forme $Au$ où $u$ est un mot de la grammaire
+  $A,B$
+\item soit $w$ est de la forme $Bu$ où $u$ est un mot de la grammaire
+  $A,B$
+\end{itemize}
+
+\subsection{Mots de Dyck}
+\medskip
+$ S\ =\ \mathcal{E}\ |\ (S)\ |\ S(S) $ 
+
+$w$ est un mot de Dyck si:
+\begin{itemize}
+\item soit $w$ est vide
+\item soit $w$ est de la forme $(u)$ où $u$ est un mot de Dyck
+  de Dyck
+\item soit $w$ est de la forme $u(v)$ où $u$ et $v$ sont des mots de Dyck
+\end{itemize}
+
+\subsection{Mots sur l'alphabet A,B qui n'ont pas trois lettres
+  consécutives égales}
+\medskip
+$ S\ =\ \mathcal{E}\ |\ U\ |\ T $
+
+$ U\ =\ A\ |\ AA\ |\ AT\ |\ AAT$
+
+$ T\ =\ B\ |\ BB\ |\ BT\ |\ BBT$
+
+$w$ est un mot de cette grammaire si:
+\begin{itemize}
+\item soit $w$ est vide
+\item soit $w$ est de la forme $A$, $AA$, $B$, $BB$
+\item soit $w$ est de la forme $AT$ ou $AAT$ où $T$ est un mot de la grammaire
+  qui commence par $B$
+\item soit $w$ est de la forme $BU$ ou $BBU$ où $U$ est un mot de la grammaire
+  qui commence par $A$
+
+\end{itemize}
+
+\subsection{Palindromes sur l'alphabet A, B}
+\medskip
+$ S\ =\ \mathcal{E}\ |\ A\ |\ B\ |\ ASA\ |\ BSB $
+
+$w$ est un mot de la grammaire des palindrome sur $A$, $B$ si:
+\begin{itemize}
+\item soit $w$ est vide
+\item soit $w$ est de la forme $A$ ou $B$
+\item soit $w$ est de la forme $AuA$ où $u$ est un palindrome.
+\item soit $w$ est de la forme $BuB$ où $u$ est un palindrome.
+\end{itemize}
+
+\subsection{Palindromes sur l'alphabet A, B, C}
+\medskip
+$ S\ =\ \mathcal{E}\ |\ A\ |\ B\ |\ ASA\ |\ BSB\ |\ CSC$
+
+$w$ est un mot de la grammaire des palindrome sur $A$, $B$ si:
+\begin{itemize}
+\item soit $w$ est vide
+\item soit $w$ est de la forme $A$ ou $B$ ou $C$
+\item soit $w$ est de la forme $AuA$ où $u$ est un palindrome.
+\item soit $w$ est de la forme $BuB$ où $u$ est un palindrome.
+\item soit $w$ est de la forme $CuC$ où $u$ est un palindrome.
+\end{itemize}
+
+\subsection{Mots sur l'alphabet A,B qui contiennent autant de A que de
+B}
+
+... 
+
+\section{Calcul de la valuation}
+
+\subsection{Mots de Fibonacci}
+\begin{table}[!hbt]
+\centering
+\small
+\setlength\tabcolsep{2pt}
+\begin{tabular}{|c|cccccccc|}
+\hline $n$ & Fib & Cas1 & Cas2 & Vide & CasAu & AtomA & AtomB & CasBAu\\
+\hline
+\hline règle & Vide $\cup$ Cas1 & CasAU $\cup$ Cas2 & AtomA $\cup$
+AtomB & $\mathcal{E}$ & AtomA*Fib & A & B & AtomB*CasAu\\ 
+\hline
+\hline
+0 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ &$\infty$ & $\infty$ \\
+1 & $\infty$ &  $\infty$ & $\infty$ & 0 & $\infty$ & 1 & 1 & $\infty$ \\
+2 & 0 &  $\infty$ & 1 & 0 & 1 & 1 & 1 & $\infty$ \\
+3 & 0 & 1 & 1 & 0 & 1 & 1 & 1 & 2 \\
+3 & 0 & 1 & 1 & 0 & 1 & 1 & 1 & 2\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[!hbt]
+\subsection{Mots de Dyck}
+\centering
+\small
+\setlength\tabcolsep{2pt}
+\begin{tabular}{|c|ccccccc|}
+\hline $n$ & Dyck & Casuu & Vide & AtomLPAR & AtomRPAR & Cas(u & Casu) \\
+\hline
+\hline règle & Vide $\cup$ Casuu & Dyck * Cas(u & $\matchcal{E}$
+&``(`` & ``)'' $ & LPAR * Casu) & Dyck * RPAR \\ 
+\hline
+\hline
+0 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ &$\infty$ \\
+1 & $\infty$ &  $\infty$ & 0 & 1 & 1 & $\infty$ &$\infty$ \\
+2 & 0 &  $\infty$ & 0 & 1 & 1 & $\infty$ &$\infty$ \\
+3 & 0 &  $\infty$ & 0 & 1 & 1 & $\infty$ & 1 \\
+4 & 0 &  $\infty$ & 0 & 1 & 1 & 2 & 1 \\
+5 & 0 & 2 & 0 & 1 & 1 & 2 & 1 \\
+6 & 0 & 2 & 0 & 1 & 1 & 2 & 1 \\
+
+\hline
+
+\end{tabular}
+\end{table}
+
+
+\begin{table}[!hbt]
+\subsection{Mots sur l'alphabet A,B}
+\centering
+\small
+\setlength\tabcolsep{2pt}
+\begin{tabular}{|c|ccccccc|}
+\hline $n$ & AB & AtomA & AtomB & CasAB & Vide & CasAu & CasBu \\
+\hline
+\hline règle & Vide $\cup$ CasAB & A & B & CasAu $\cup$ CasBu &
+$\mathcal{E}$ & AtomA * AB & AtomB * AB \\
+\hline
+\hline
+0 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ &$\infty$ \\
+1 & $\infty$ &  1 & 1 & $\infty$ & 0 & $\infty$ &$\infty$ \\
+2 & 0 &  1 & 1 & $\infty$ & 0 & 1 & 1 \\
+3 & 0 &  1 & 1 & 1 & 0 & 1 & 1 \\
+4 & 0 &  1 & 1 & 1 & 0 & 1 & 1 \\
+
+
+\hline
+
+\end{tabular}
+\end{table}
+
+\begin{table}[!hbt]
+\subsection{Mots qui n'ont pas trois lettres consécutives égales sur A, B}
+\centering
+\small
+\setlength\tabcolsep{2pt}
+\begin{tabular}{|c|ccccccccc|}
+\hline $n$ & Three & Vide & AtomA & AtomB & AA & BB & S & U & U1 \\
+\hline
+\hline règle & Vide $\cup$ S & $\mathcal{E}$ & A & B & AtomA*AtomA &
+AtomB*AtomB & U $\cup$ T & AtomA $\cup$ U1 & AA $\cup$ U2\\
+\hline
+\hline
+0 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ &
+$\infty$ & $\infty$ & $\infty$ \\
+1 & $\infty$ & 0  & 1 & 1 & $\infty$ & $\infty$ &
+$\infty$ & $\infty$ & $\infty$ \\
+2 & 0 & 0  & 1 & 1 & 2 & 2 &
+$\infty$ & 1 & $\infty$ \\
+3 & 0 & 0  & 1 & 1 & 2 & 2 &
+1& 1 & 2 \\
+4 & 0 & 0  & 1 & 1 & 2 & 2 &
+1& 1 & 2 \\
+5 & 0 & 0  & 1 & 1 & 2 & 2 &
+1& 1 & 2 \\
+6 & 0 & 0  & 1 & 1 & 2 & 2 &
+1& 1 & 2 \\
+
+\hline
+\end{tabular}
+
+\vspace{1cm}
+\begin{tabular}{|c|cccccccc|}
+\hline $n$ & U2 & AT & AAT & T & T1 & T2 & BU & BBU \\
+\hline
+\hline règle & AT $\cup$ AAT & AtomA * T & AtomA * AT & AtomB $\cup$
+T1 & BB $\cup$ T2 & BU $\cup$ BBU & AtomB * U & AtomB * BU\\
+\hline
+0 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ &
+$\infty$ & $\infty$  \\
+1 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ &
+$\infty$ & $\infty$  \\
+2 & $\infty$ &  $\infty$ & $\infty$ & 1 & $\infty$ & $\infty$ &
+$\infty$ & $\infty$  \\
+3 & $\infty$ & 2 & $\infty$ & 1 & 2 & $\infty$ &
+2 & $\infty$  \\
+4 & 2 & 2 & 3 & 1 & 2 & $\infty$ &
+2 & 3  \\
+5 & 2 & 2 & 3 & 1 & 2 & 2 &
+2 & 3  \\
+6 & 2 & 2 & 3 & 1 & 2 & 2 &
+2 & 3  \\
+
+\hline
+\end {tabular}
+\end{table}
+
+\begin{table}[!hbt]
+\subsection{Palindromes sur A,B}
+\centering
+\small
+\setlength\tabcolsep{2pt}
+\begin{tabular}{|c|cccccc|}
+\hline $n$ & Pal & Vide & AtomA & AtomB & S & S1\\
+\hline
+\hline règle & Vide $\cup$ S & $\mathcal{E}$ & A & B & AtomA $\cup$ S1
+& AtomB $\cup$ S2 \\
+\hline
+\hline
+0 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$\\
+1 & $\infty$ & 0 & 1 & 1 & $\infty$ & $\infty$\\
+2 & 0 & 0 & 1 & 1 & 1 & 1\\
+3 & 0 & 0 & 1 & 1 & 1 & 1\\
+4 & 0 & 0 & 1 & 1 & 1 & 1\\
+5 & 0 & 0 & 1 & 1 & 1 & 1\\
+6 & 0 & 0 & 1 & 1 & 1 & 1\\
+
+\hline
+\end{tabular}
+
+\vspace{1cm}
+
+\begin{tabular}{|c|ccccc|}
+\hline $n$ & S2 & ASA & ASA1 & BSB & BSB1  \\
+\hline
+\hline règle & ASA $\cup$ BSB & AtomA * ASA1 & Pal * AtomA &
+AtomB * BSB1 & Pal * AtomB\\
+\hline
+\hline
+0 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ \\
+1 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ \\
+2 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ \\
+3 & $\infty$ &  $\infty$ & 1 & $\infty$ & 1 \\
+4 & $\infty$ &  2 & 1 & 2 & 1 \\
+5 & 2 &  2 & 1 & 2 & 1 \\
+6 & 2 &  2 & 1 & 2 & 1 \\
+
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[!hbt]
+\subsection{Palindromes sur A,B,C}
+\centering
+\small
+\setlength\tabcolsep{2pt}
+\begin{tabular}{|c|ccccccccc|}
+\hline $n$ & Pal & Vide & AtomA & AtomB & AtomC & S & S1 & S2 & S3\\
+\hline
+\hline règle & Vide $\cup$ S & $\mathcal{E}$ & A & B & C & AtomA $\cup$ S1
+& AtomB $\cup$ S2 & AtomC $\cup$ S3 & ASA $\cup$ S4 \\
+\hline
+\hline
+0 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ \\
+1 & $\infty$ & 0 & 1 & 1 & 1 & $\infty$ & $\infty$ & $\infty$ & $\infty$ \\
+2 & 0 & 0 & 1 & 1 & 1 & 1 & 1 & 1 & $\infty$ \\
+3 & 0 & 0 & 1 & 1 & 1 & 1 & 1 & 1 & $\infty$ \\
+4 & 0 & 0 & 1 & 1 & 1 & 1 & 1 & 1 & $\infty$ \\
+5 & 0 & 0 & 1 & 1 & 1 & 1 & 1 & 1 & 2 \\
+6 & 0 & 0 & 1 & 1 & 1 & 1 & 1 & 1 & 2 \\
+
+\hline
+\end{tabular}
+
+\vspace{1cm}
+
+\begin{tabular}{|c|ccccccc|}
+\hline $n$  & S4 & ASA & ASA1 & BSB & BSB1 & CSC & CSC1  \\
+\hline
+\hline règle & BSB $\cup$ CSC & AtomA * ASA1 & Pal * AtomA &
+AtomB * BSB1 & Pal * AtomB & AtomC * CSC1 & Pal * AtomC\\
+\hline
+\hline
+0 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ \\
+1 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ \\
+2 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ \\
+3 & $\infty$ &  $\infty$ & 1 & $\infty$ & 1 & $\infty$ & 1 \\
+4 & $\infty$ &  2 & 1 & 2 & 1 & 2 & 1 \\
+5 & 2 & 2 & 1 & 2 & 1 & 2 & 1 \\
+6 & 2 & 2 & 1 & 2 & 1 & 2 & 1 \\
+
+\hline
+\end{tabular}
+
+
+\end{table}
+
+\subsection{Mots sur A,B qui contiennent autant de A que de B}
+...
+\section{Tests de cohérence génériques}
+
+\end{document}
