@@ -12,6 +12,7 @@ class AbstractRule:
     def _set_grammar(self, gram):
         self._grammar = gram
 
+# Abstract class ??
 class ConstantRule(AbstractRule):
 
     def __init__(self, obj):
@@ -69,7 +70,8 @@ class EpsilonRule(ConstantRule) :
     def random(self, n):
         return self._object
 
-
+    def __str__(self):
+        return "EpsilonRule("+ str(self._object) +")"
 
 class SingletonRule(ConstantRule) :
     
@@ -107,6 +109,9 @@ class SingletonRule(ConstantRule) :
 
     def random(self, n):
         return self._object
+
+    def __str__(self):
+        return "SingletonRule("+str(self._object)+")"
 
 class ConstructorRule(AbstractRule):
 
@@ -187,6 +192,11 @@ class UnionRule(ConstructorRule):
         else:
             return fst.count(len(obj)) + snd.rank(obj)
 
+    def __str__(self):
+        fst, snd = self._parameters
+        # fst, snd = self._grammar[fst], self._grammar[snd]
+        return "UnionRule("+str(fst)+", "+str(snd)+")"
+
 class ProductRule(ConstructorRule):
 
     def __init__(self, fst, snd, cons, f):
@@ -251,3 +261,7 @@ class ProductRule(ConstructorRule):
             n += fst.count(i) * snd.count(s - i)
         return n + fst.rank(e1) * snd.count(len(e2)) + snd.rank(e2)
         
+    def __str__ (self):
+        fst, snd = self._parameters
+        # fst, snd = self._grammar[fst], self._grammar[snd]
+        return "ProductRule("+str(fst)+", "+str(snd)+")"
