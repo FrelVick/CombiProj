@@ -3,16 +3,15 @@ import math
 import Rules as R
 import Tree
 import Grammars
-
+import CRules as CR
 
 class IncorrectGrammar(Exception):
 
     def __init__(self, message):
         super(IncorrectGrammar, self).__init__(message)
     
-# Vérifie que tous les non-terminaux apparaissant dans 
-# les règles sont bien définis dans la grammaire
-
+'''Vérifie que tous les non-terminaux apparaissant dans 
+les règles sont bien définis dans la grammaire '''
 def check_defined_rules (grammar):
     for rule_id in grammar:
         rule = grammar[rule_id]
@@ -32,18 +31,27 @@ def init_grammar (grammar):
 
     check_defined_rules(grammar)
 
-    constr_before, constr_after = {}, {}
+    ''' Pour le calcul des valuations on a besoin de comparer 
+    les résultats de l'itération courante avec ceux de l'itération précédente,
+    on stocke donc les valuations calculées dans les dictionnaires val_before 
+    et val_after'''
+
+    val_before, val_after = {}, {}
+
     for rule in grammar.values():
         if isinstance(rule, R.ConstructorRule):
-            constr_before [rule] = rule.valuation() 
-            constr_after [rule] = 0
+            val_before[rule] = rule.valuation() 
+            val_after [rule] = 0
 
-    while (constr_before != constr_after):
-        constr_before = constr_after.copy()
-        for rule in constr_after:
+    # Tant que l'on n'a pas atteint le point fixe, on met à jour les valuations 
+    while (val_before != val_after):
+        val_before = val_after.copy()
+        for rule in val_after:
             rule._update_valuation()
-            constr_after[rule] = rule.valuation()
+            val_after[rule] = rule.valuation()
    
+    # Si on atteint un point fixe pour lequel une des règles à une valuation infine,
+    # la grammaire est mal construite
     for rule_id in grammar:
         if grammar[rule_id].valuation() == float('inf'):
             raise IncorrectGrammar("Rule "+rule_id+" is incorrect (inf valuation)")
@@ -75,40 +83,59 @@ def get_valuation(gram):
 # On teste si la valuation et le nombre d'objets calculés à partir
 # de l'ensemble de règles correspond aux résultats obtenus à 
 # partir de formules.
-def tests (name, gram, rule_init, card_fun, valuation = []):
+def tests (name, gram, rule_init, card_fun, n, valuation = []):
     print ("\nTests on "+name)
+    rule = gram[rule_init]
     try:
+
+        # V A L U A T I O N 
+
         if len(valuation) != 0:
             print ("Valuation:")
             assert (valuation == get_valuation(gram))
             print ("Passed")
-        print ("Cardinality:")
-        for i in range(10):
-            count = gram[rule_init].count(i)
+
+        # C A R D I N A L I T Y
+
+        print ("\nCardinality:")
+        for i in range(n):
+            count = rule.count(i)
             assert (count == card_fun(i))
-            assert (count == len(gram[rule_init].list(i)))
+            assert (count == len(rule.list(i)))
         print ("Passed")
+
+        # R A N K
+
+        print ("\nRank:")
+        assert([rule.rank(i) for i in rule.list(n)] == list(range(rule.count(n))))
+        print ("Passed")
+
+        # U N R A N K
+
+        print("\nUnrank:")
+        assert(rule.list(n) == [rule.unrank(n, i) for i in list(range(rule.count(n)))])
+        print("Passed")
+
+        # R A N K ( U N R A N K (i)) = i
+
+        print ("\nRank & Unrank:")
+        assert(rule.rank(rule.unrank(n, i)) == i for i in list(range(rule.count(n))))
+        print ("Passed")
+
     except AssertionError:
         print ("Not passed")
 
 
 for g in grammars:
     init_grammar(grammars[g][0])
-    tests(g, grammars[g][0], grammars[g][1], grammars[g][2])
-    print (get_valuation(grammars[g][0]))
-    print ((grammars[g][0][grammars[g][1]]).list(1))
+    tests(g, grammars[g][0], grammars[g][1], grammars[g][2], 7)
+    # print (get_valuation(grammars[g][0]))
+    # print ((grammars[g][0][grammars[g][1]]).list(1))
 
-print("\nTest unrank:")
-gram = "ABCPalindrome"
-rule = "Pal"
-l = grammars[gram][0][rule].list(5)
-print (l)
-for i in l:
-    print(i, grammars[gram][0][rule].rank(i))
+''' TESTS GRAMMAIRE CONDENSEE ''' 
 
-print(grammars[gram][0][rule].random(10))
+ng = {"Tree" : CR.Union (CR.Singleton (Tree.Leaf), 
+                         CR.Prod(CR.NonTerm ("Tree"), CR.NonTerm ("Tree"), 
+                                 lambda l : Tree.Node(l)))}
 
-# print("AB",grammars["ABGram"][0]["AB"].rank("AB"))
-
-# for i in range(30):
-#     print(grammars["EvenGram"][0]["S"].count(i))
+''' TESTS BOUND '''

@@ -24,17 +24,17 @@ def sep_last(s):
 
 # Arbres binaires
 treeGram = {
-    "Tree" : R.UnionRule("Node", "Leaf", lambda(t): not (t.is_leaf())),
+    "Tree" : R.UnionRule("Node", "Leaf", lambda t: not (t.is_leaf())),
     "Node" : R.ProductRule("Tree", "Tree",
-                           lambda (l) : Tree.Node(l), lambda(t) : (t.left(), t.right())),
+                           lambda l : Tree.Node(l), lambda t : (t.left(), t.right())),
     "Leaf" : R.SingletonRule(Tree.Leaf)
 }
 
 # Mots de Fibonacci
 fiboGram = { 
     "Fib"   : R.UnionRule("Vide", "Cas1", string_empty),
-    "Cas1"  : R.UnionRule("CasAu", "Cas2", lambda(s) : s[0] == "A"),
-    "Cas2"  : R.UnionRule("AtomB", "CasBAu", lambda(s) : s == "B"),
+    "Cas1"  : R.UnionRule("CasAu", "Cas2", lambda s : s[0] == "A"),
+    "Cas2"  : R.UnionRule("AtomB", "CasBAu", lambda s : s == "B"),
     "Vide"  : R.EpsilonRule(""),
     "CasAu" : R.ProductRule("AtomA", "Fib", "".join, sep_first), 
     "AtomA" : R.SingletonRule("A"),
@@ -47,7 +47,7 @@ ABGram = {
     "AB" : R.UnionRule("Vide", "CasAB", string_empty),
     "AtomA" : R.SingletonRule("A"),
     "AtomB" : R.SingletonRule("B"),
-    "CasAB" : R.UnionRule("CasAu", "CasBu", lambda(s) :  s[0] == 'A'),
+    "CasAB" : R.UnionRule("CasAu", "CasBu", lambda s :  s[0] == 'A'),
     "Vide" : R.EpsilonRule(""),
     "CasAu" : R.ProductRule("AtomA", "AB", "".join, sep_first),
     "CasBu" : R.ProductRule("AtomB", "AB", "".join, sep_first)
@@ -80,13 +80,13 @@ DyckGram = {
 
 # Mots qui n'ont pas deux lettres consécutives égales
 TwoGram = {
-    "Two" : R.UnionRule("CasAu", "CasBAu", lambda(s): s[0] == 'A'),
+    "Two" : R.UnionRule("CasAu", "CasBAu", lambda s: s[0] == 'A'),
     "Vide" : R.EpsilonRule(""),
     "AtomA" : R.SingletonRule("A"),
     "AtomB" : R.SingletonRule("B"),
     "CasAu" : R.UnionRule ("Vide", "CasABu", string_empty),
     "CasABu": R.ProductRule("AtomA", "CasBu", "".join, sep_first),
-    "CasBu" : R.UnionRule ("CasBAu", "Vide", lambda (s) : not string_empty(s)),
+    "CasBu" : R.UnionRule ("CasBAu", "Vide", lambda s : not string_empty(s)),
     "CasBAu" : R.ProductRule("AtomB", "CasAu", "".join, sep_first),
 }
 
@@ -98,15 +98,15 @@ ThreeGram = {
     "AtomB" : R.SingletonRule("B"),
     "AA"   : R.ProductRule("AtomA", "AtomA", "".join, sep_first),
     "BB"   : R.ProductRule("AtomB", "AtomB", "".join, sep_first),
-    "S"    : R.UnionRule ("U", "T", lambda(s) : s[0] == 'A'),
-    "U"    : R.UnionRule("AtomA", "U1", lambda(s) : s=='A'),
-    "U1"   : R.UnionRule("AA", "U2", lambda(s) : s =="AA"),
-    "U2"   : R.UnionRule("AT", "AAT", lambda(s) : s[0] == "A" and s[1] == "B"),
+    "S"    : R.UnionRule ("U", "T", lambda s : s[0] == 'A'),
+    "U"    : R.UnionRule("AtomA", "U1", lambda s : s=='A'),
+    "U1"   : R.UnionRule("AA", "U2", lambda s : s =="AA"),
+    "U2"   : R.UnionRule("AT", "AAT", lambda s : s[0] == "A" and s[1] == "B"),
     "AT"   : R.ProductRule("AtomA", "T", "".join, sep_first),
     "AAT"  : R.ProductRule("AtomA", "AT", "".join, sep_first),
-    "T"    : R.UnionRule("AtomB", "T1", lambda(s) : s == "B"),
-    "T1"   : R.UnionRule("BB", "T2", lambda(s) : s == "BB"),
-    "T2"   : R.UnionRule("BU", "BBU", lambda(s) : s[0] == "B" and s[1] == "A"),
+    "T"    : R.UnionRule("AtomB", "T1", lambda s : s == "B"),
+    "T1"   : R.UnionRule("BB", "T2", lambda s : s == "BB"),
+    "T2"   : R.UnionRule("BU", "BBU", lambda s : s[0] == "B" and s[1] == "A"),
     "BU"   : R.ProductRule("AtomB", "U", "".join, sep_first),
     "BBU"  : R.ProductRule("AtomB", "BU", "".join, sep_first),
 }
@@ -118,9 +118,9 @@ ABPalindrome = {
     "AtomA" : R.SingletonRule("A"),
     "AtomB" : R.SingletonRule("B"),
 
-    "S"    : R.UnionRule ("AtomA", "S1", lambda(s) : s == "A"),
-    "S1"   : R.UnionRule("AtomB", "S2", lambda(s) : s == "B"),
-    "S2"   : R.UnionRule("ASA", "BSB", lambda(s) : s[0] == "A"),
+    "S"    : R.UnionRule ("AtomA", "S1", lambda s : s == "A"),
+    "S1"   : R.UnionRule("AtomB", "S2", lambda s : s == "B"),
+    "S2"   : R.UnionRule("ASA", "BSB", lambda s : s[0] == "A"),
 
     "ASA"   : R.ProductRule("AtomA", "ASA1", "".join, sep_first),
     "ASA1"  : R.ProductRule("Pal", "AtomA", "".join, sep_last),
@@ -138,11 +138,11 @@ ABCPalindrome = {
     "AtomB" : R.SingletonRule("B"),
     "AtomC" : R.SingletonRule("C"),
 
-    "S"    : R.UnionRule ("AtomA", "S1", lambda(s) : s == "A"),
-    "S1"   : R.UnionRule("AtomB", "S2", lambda(s) : s == "B"),
-    "S2"   : R.UnionRule("AtomC", "S3", lambda (s) : s == "C"),
-    "S3"   : R.UnionRule("ASA", "S4", lambda(s): s[0] == "A"),
-    "S4"   : R.UnionRule("BSB", "CSC", lambda (s) : s[0] == "B"),
+    "S"    : R.UnionRule ("AtomA", "S1", lambda s : s == "A"),
+    "S1"   : R.UnionRule("AtomB", "S2", lambda s : s == "B"),
+    "S2"   : R.UnionRule("AtomC", "S3", lambda s : s == "C"),
+    "S3"   : R.UnionRule("ASA", "S4", lambda s: s[0] == "A"),
+    "S4"   : R.UnionRule("BSB", "CSC", lambda s : s[0] == "B"),
 
     "ASA"   : R.ProductRule("AtomA", "ASA1", "".join, sep_first),
     "ASA1"  : R.ProductRule("Pal", "AtomA", "".join, sep_last),
@@ -211,11 +211,11 @@ def catalan (n):
     for i in range (2, n+1):
         num *= (i + n) 
         den *=  i
-    return num/den
+    return num//den
 
 def dyck_count (n):
     if n % 2 == 0:
-        return catalan (n/2)
+        return catalan (n//2)
     else:
         return 0
 
@@ -224,7 +224,7 @@ def tree_count (n):
         return 0
     else:
         f = math.factorial(n-1)
-        return math.factorial(2*(n-1))/(f*f*n)
+        return math.factorial(2*(n-1))//(f*f*n)
 
 def palindrome_count (base, n):
     if n == 0:
@@ -232,7 +232,7 @@ def palindrome_count (base, n):
     elif n <= 2:
         return base 
     else:
-        return base ** ((n+1)/2)
+        return base ** ((n+1)//2)
 
 def three_count (n):
     if n == 0:
@@ -253,13 +253,13 @@ def two_count (n):
 grammars = {
 
     "treeGram"  : [treeGram, "Tree", tree_count],
-    "fiboGram"  : [fiboGram, "Fib", lambda(n) : fibo_count(n+2)],
+    "fiboGram"  : [fiboGram, "Fib", lambda n : fibo_count(n+2)],
     "TwoGram"   : [TwoGram, "Two", two_count],
     "ThreeGram" : [ThreeGram, "Three", three_count ],
-    "ABGram"    : [ABGram, "AB", lambda (n) : 2**n],
+    "ABGram"    : [ABGram, "AB", lambda n: 2**n],
     "DyckGram"  : [DyckGram, "Dyck", dyck_count],
-    "ABPalindrome" : [ABPalindrome, "Pal", lambda(x) : palindrome_count(2, x) ],
-    "ABCPalindrome": [ABCPalindrome, "Pal", lambda(x) : palindrome_count(3, x)],
+    "ABPalindrome" : [ABPalindrome, "Pal", lambda x : palindrome_count(2, x) ],
+    "ABCPalindrome": [ABCPalindrome, "Pal", lambda x : palindrome_count(3, x)],
  
 }
 

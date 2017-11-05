@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*
 import Tree
 import Rules as R
 from abc import ABCMeta, abstractmethod
@@ -7,14 +8,13 @@ class ConstantCRule:
     def __init__(self, obj):
         self._object = obj
 
-    @abstractmethod
-    def to_simple_rule(self, g):
-        ''' Returns equivalent rule in developped form'''
-
 class Epsilon(ConstantCRule):
     def __init__(self, obj):
         super(Epsilon, self).__init__(obj)
 
+    # Chaque règle crée a comme identifiant une chaine de caractère
+    # qui contient un entier (égal à la taille du dictionnaire lors de 
+    # la création de la règle)
     def to_simple_rule(self, g):
         rule_name = str(len(g))
         g[rule_name] = R.EpsilonRule(self._object)
@@ -35,29 +35,30 @@ class ConstructorCRule:
         self._r1 = r1
         self._r2 = r2
 
-    # @abstractmethod
-    # def to_simple_rule:
-    #     ''' Returns equivalent rule in developped form'''
-
 class Union(ConstructorCRule):
 
-    def __init__(self, r1, r2, f):
+    def __init__(self, r1, r2, f = None):
         super(Union, self).__init__(r1, r2)
         self._f = f
         
+
     def to_simple_rule(self, g, name =""):
+        # On convertit d'abord les règles contenues dans 
+        # l'union
         g, name1 = self._r1.to_simple_rule(g)
         g, name2 = self._r2.to_simple_rule(g)
+        # Si un nom a été donnée dans la grammaire on le conserve
         if name == "":
             rule_name = str(len(g))
         else:
             rule_name = name
+        # On crée la règle union
         g[rule_name] = R.UnionRule(name1, name2, self._f)
-        print ("union", rule_name, g[rule_name])
         return (g, rule_name)
 
 class Prod(ConstructorCRule):
-    def __init__(self, r1, r2, join, f):
+
+    def __init__(self, r1, r2, join, f = None):
         super(Prod, self).__init__(r1, r2)
         self._join = join
         self._f = f
@@ -80,46 +81,27 @@ class NonTerm:
     def to_simple_rule(self, g):
         return (g, self._rule)
 
-ng = {"Tree" : Union (Singleton (Tree.Leaf), Prod(NonTerm ("Tree"), NonTerm ("Tree"), 
-                                                  lambda (l) : Tree.Node(l), lambda (t) : (t.left(), t.right())), lambda(t) : t.is_leaf())}
+# class Sequence():
 
-def init_grammar (grammar):
+#     def __init__(self, nt, casvide, cons, fp, fu):
+#         self._nt = nt
+#         self._vide = casvide
+#         self._cons = cons
+#         self._fp = fp
+#         self._fu = fu
 
-    for rule_id in grammar:
-        grammar[rule_id]._set_grammar(grammar)
+#     def to_simple_rule(self, g, name =""):
+#         rule_name = str(len(g))
+#         rule = Union(Epsilon(self._vide), Prod(rule_name, self._nt, self._cons, self._fp), self._fu)
+#         (g, rn) = rule.to_simple_rule(g, rule_name)
+#         return (g, rn)
 
-    # check_defined_rules(grammar)
 
-    constr_before, constr_after = {}, {}
-    for rule in grammar.values():
-        if isinstance(rule, R.ConstructorRule):
-            constr_before [rule] = rule.valuation() 
-            constr_after [rule] = 0
-
-    while (constr_before != constr_after):
-        constr_before = constr_after.copy()
-        for rule in constr_after:
-            rule._update_valuation()
-            constr_after[rule] = rule.valuation()
-   
-    for rule_id in grammar:
-        if grammar[rule_id].valuation() == float('inf'):
-            raise IncorrectGrammar("Rule "+rule_id+" is incorrect (inf valuation)")
-
-   
-
+# Conversion d'une grammaire condensée en une grammaire simple
 def dvp_gram (g):
     new_gram = g.copy()
     for rule_name in g:
-        print("rule name", rule_name)
-        print(type(g[rule_name]))
         (a, r) = g[rule_name].to_simple_rule(new_gram, rule_name)
-        print ("dvp", a)
         new_gram.update(a)
-        init_grammar(new_gram)
-    for k in new_gram:
-        print(k, str(new_gram[k]))
-
-print (R.SingletonRule(""))
-dvp_gram (ng)
+    return new_gram
             
