@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*
 from abc import ABCMeta, abstractmethod
+import random
 
 
 class AbstractRule:
@@ -17,7 +19,6 @@ class ConstantRule(AbstractRule):
         super(ConstantRule, self).__init__()
         self._object = obj
 
-        
     @abstractmethod
     def valuation(self):
         ''' Return valuation '''
@@ -29,6 +30,7 @@ class ConstantRule(AbstractRule):
     @abstractmethod
     def list(self, i):
         '''Return list of all objects of weight i'''
+        
 
 class EpsilonRule(ConstantRule) :
     
@@ -53,6 +55,22 @@ class EpsilonRule(ConstantRule) :
             return [self._object]
         return []
 
+    def unrank(self, n, i):
+        if i == 0 and n == 0 :
+            return self._object
+        raise ValueError("")
+    
+    def rank(self, obj):
+        if obj == self._object:
+            return 0
+        else:
+            raise ValueError("")
+
+    def random(self, n):
+        return self._object
+
+
+
 class SingletonRule(ConstantRule) :
     
     def __init__(self, obj):
@@ -75,7 +93,20 @@ class SingletonRule(ConstantRule) :
         if i == 1:
             return [self._object]
         return []
-            
+        
+    def unrank(self, n, i):
+        if i == 0 and n == 1:
+            return self._object
+        raise ValueError("")
+
+    def rank(self, obj):
+        if obj == self._object:
+            return 0
+        else:
+            raise ValueError("")
+
+    def random(self, n):
+        return self._object
 
 class ConstructorRule(AbstractRule):
 
@@ -100,16 +131,25 @@ class ConstructorRule(AbstractRule):
     def list(self, i):
         '''Return list of all objects of weight i'''
 
+    @abstractmethod
+    def unrank(self, n, i):
+        '''Return object of rank i among objects of size n'''
+
     def _update_valuation(self):
         v1 = self._grammar[self._parameters[0]].valuation()
         v2 = self._grammar[self._parameters[1]].valuation()
         self._calc_valuation(v1, v2)
+
+    def random(self, n):
+        return self.unrank(n, random.randrange(self.count(n)))
+        
       
 class UnionRule(ConstructorRule):
 
-    def __init__(self, fst, snd):
+    def __init__(self, fst, snd, f):
 
         super(UnionRule, self).__init__(fst, snd)
+        self._derive_from_first = f
 
     def _calc_valuation(self, v1, v2):
         self._valuation =  min(v1, v2)
@@ -126,12 +166,34 @@ class UnionRule(ConstructorRule):
         fst, snd = self._grammar[fst], self._grammar[snd]
         return fst.list(i) + snd.list(i)
 
+    # Vérifier si param pas neg si + que count ..
+    # Ajouter fun aux fst sdn
+    def unrank(self, n, i):
+        if i >= self.count(n):
+            raise ValueError("unrank union")
+        else:
+            fst, snd = self._parameters
+            fst, snd = self._grammar[fst], self._grammar[snd]
+            if i < fst.count(n):
+                return fst.unrank(n, i)
+            else:
+                return snd.unrank(n, i - fst.count(n))
+
+    def rank(self, obj):
+        fst, snd = self._parameters
+        fst, snd = self._grammar[fst], self._grammar[snd]
+        if self._derive_from_first(obj):
+            return fst.rank(obj)
+        else:
+            return fst.count(len(obj)) + snd.rank(obj)
+
 class ProductRule(ConstructorRule):
 
-    def __init__(self, fst, snd, cons):
+    def __init__(self, fst, snd, cons, f):
 
         super(ProductRule, self).__init__(fst, snd)
         self._constructor = cons
+        self._get_pair = f
 
     def _calc_valuation(self, v1, v2):
         self._valuation =  v1 + v2
@@ -163,8 +225,29 @@ class ProductRule(ConstructorRule):
                 l2 = snd.list(i - i1)
                 for x in l1:
                     for y in l2:
-                        # print (x, y)
-                        # print ("ici", self._constructor([x, y]))
                         l.append( self._constructor([x, y]))
         return l
 
+    def unrank(self, n, i):
+        if i >= self.count(n):
+            raise ValueError("")
+        total = 0
+        fst, snd = self._parameters
+        fst, snd = self._grammar[fst], self._grammar[snd]
+        for j in range(n+1):
+            total = fst.count(j) * snd.count(n - j )
+            if (i < total):
+                return self._constructor([fst.unrank(j, i/snd.count(n-j)), snd.unrank(n-j, i%snd.count(n-j))])
+            j += 1
+            i -= total
+
+    def rank(self, obj):
+        fst, snd = self._parameters
+        fst, snd = self._grammar[fst], self._grammar[snd]
+        e1, e2 = self._get_pair(obj)
+        s = len(e1) + len(e2)
+        n = 0
+        for i in range (len(e1)):
+            n += fst.count(i) * snd.count(s - i)
+        return n + fst.rank(e1) * snd.count(len(e2)) + snd.rank(e2)
+        

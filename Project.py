@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*
+import math
 import Rules as R
 import Tree
-import math
 import Grammars
 
 
@@ -95,4 +95,20 @@ def tests (name, gram, rule_init, card_fun, valuation = []):
 for g in grammars:
     init_grammar(grammars[g][0])
     tests(g, grammars[g][0], grammars[g][1], grammars[g][2])
-    print ((grammars[g][0][grammars[g][1]]).list(4))
+    print (get_valuation(grammars[g][0]))
+    print ((grammars[g][0][grammars[g][1]]).list(1))
+
+print("\nTest unrank:")
+gram = "ABCPalindrome"
+rule = "Pal"
+l = grammars[gram][0][rule].list(5)
+print (l)
+for i in l:
+    print(i, grammars[gram][0][rule].rank(i))
+
+print(grammars[gram][0][rule].random(10))
+
+# print("AB",grammars["ABGram"][0]["AB"].rank("AB"))
+
+# for i in range(30):
+#     print(grammars["EvenGram"][0]["S"].count(i))

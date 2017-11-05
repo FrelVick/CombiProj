@@ -58,11 +58,11 @@ class Node():
         Recursively computes the size of self
         """
         if self.is_leaf():
-            self._size = 0
+            self._size = 1
         else:
-            self._size = self.left().size() + self.right().size() + 1
+            self._size = self.left().__len__() + self.right().__len__() 
     
-    def size(self):
+    def __len__(self):
         """
         Return the number of non leaf nodes in the binary tree
         """
