@@ -212,8 +212,6 @@ class UnionRule(ConstructorRule):
     def count(self, i):
         if i < 0 : 
             raise ValueError("Union rule COUNT : Weight must be positive or null")
-        # r0 = self._grammar[self._parameters[0]]
-        # r1 = self._grammar[self._parameters[1]]
         r0, r1 = self.get_param_rules()
         return r0.count(i) + r1.count(i)
 
@@ -221,8 +219,6 @@ class UnionRule(ConstructorRule):
         if i < 0 :
             raise ValueError("Union rule LIST : size must be positive or null")
         fst, snd = self.get_param_rules()
-        # fst, snd = self._parameters
-        # fst, snd = self._grammar[fst], self._grammar[snd]
         return fst.list(i) + snd.list(i)
 
     @memoizeu
@@ -233,8 +229,6 @@ class UnionRule(ConstructorRule):
         if i < 0:
             raise ValueError("Union rule UNRANK: rank must be positive or null")
         else:
-            # fst, snd = self._parameters
-            # fst, snd = self._grammar[fst], self._grammar[snd]
             fst, snd = self.get_param_rules()
             # L'objet de rang i dérive de la première règle
             if i < fst.count(n):
@@ -246,8 +240,6 @@ class UnionRule(ConstructorRule):
     def rank(self, obj):
         if (self._derive_from_first == None):
             raise NotImplementedError("To call rank, provide function as arg")
-        # fst, snd = self._parameters
-        # fst, snd = self._grammar[fst], self._grammar[snd]
         fst, snd = self.get_param_rules()
         if self._derive_from_first(obj):
             return fst.rank(obj)
@@ -256,7 +248,6 @@ class UnionRule(ConstructorRule):
 
     def __str__(self):
         fst, snd = self._parameters
-        # fst, snd = self._grammar[fst], self._grammar[snd]
         return "UnionRule("+str(fst)+", "+str(snd)+")"
 
     def __print__(self):
@@ -279,8 +270,6 @@ class ProductRule(ConstructorRule):
     def count(self, i):
         if i < 0 : 
             raise ValueError("Weight must be positive or null")
-        # r1 = self._grammar[self._parameters[0]]
-        # r2 = self._grammar[self._parameters[1]]
         r1, r2 = self.get_param_rules()
         v1 = r1.valuation()
         v2 = r2.valuation()
@@ -294,10 +283,7 @@ class ProductRule(ConstructorRule):
     def list(self, i):
         if i < 0:
             raise ValueError("Product rule LIST: size must be positive or null")
-        # fun = self._constructor
         fst, snd = self.get_param_rules()
-        # fst, snd = self._parameters
-        #        fst, snd = self._grammar[fst], self._grammar[snd]
         l = []
         v1 = fst.valuation()
         v2 = snd.valuation()
@@ -320,8 +306,6 @@ class ProductRule(ConstructorRule):
         if i < 0:
             raise ValueError("Product rule UNRANK: rank must be positive or null")
         total = 0
-        # fst, snd = self._parameters
-        # fst, snd = self._grammar[fst], self._grammar[snd]
         fst, snd = self.get_param_rules()
         for j in range(n+1):
             total = fst.count(j) * snd.count(n - j )
@@ -336,8 +320,6 @@ class ProductRule(ConstructorRule):
         if (self._get_pair == None):
             raise NotImplementedError("To call rank, provide function as arg")
      
-        # fst, snd = self._parameters
-        # fst, snd = self._grammar[fst], self._grammar[snd]
         fst, snd = self.get_param_rules()
         e1, e2 = self._get_pair(obj)
         s = len(e1) + len(e2)
@@ -348,7 +330,6 @@ class ProductRule(ConstructorRule):
         
     def __str__ (self):
         fst, snd = self._parameters
-        # fst, snd = self._grammar[fst], self._grammar[snd]
         return "ProductRule("+str(fst)+", "+str(snd)+")"
 
     def __print__(self):

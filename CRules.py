@@ -81,20 +81,23 @@ class NonTerm:
     def to_simple_rule(self, g):
         return (g, self._rule)
 
-# class Sequence():
+class Sequence():
 
-#     def __init__(self, nt, casvide, cons, fp, fu):
-#         self._nt = nt
-#         self._vide = casvide
-#         self._cons = cons
-#         self._fp = fp
-#         self._fu = fu
+    # Cas simple : sans les fonctions pour rank
+    def __init__(self, nt, casvide, cons):
+        self._nt = nt
+        self._vide = casvide
+        self._cons = cons
 
-#     def to_simple_rule(self, g, name =""):
-#         rule_name = str(len(g))
-#         rule = Union(Epsilon(self._vide), Prod(rule_name, self._nt, self._cons, self._fp), self._fu)
-#         (g, rn) = rule.to_simple_rule(g, rule_name)
-#         return (g, rn)
+    def to_simple_rule(self, g, name =""):
+        if name == "":
+            rule_name = str(len(g))
+        else:
+            rule_name = name
+        rule = Union(Epsilon(self._vide), Prod(NonTerm(rule_name), NonTerm(self._nt), self._cons))
+        (g, rn) = rule.to_simple_rule(g, rule_name)
+        print("rn", g)
+        return (g, rn)
 
 
 # Conversion d'une grammaire condensée en une grammaire simple
