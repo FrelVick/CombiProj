@@ -11,6 +11,7 @@ class Node():
             of either two binary trees or 2 objects that can be made into binary trees
         """
         self._isleaf = (children is None)
+        self._children = None
         if not self._isleaf:
             if len(children) != 2:
                 raise ValueError("A binary tree needs exactly two children")
@@ -33,7 +34,9 @@ class Node():
         if other.is_leaf():
             return False
         return self.left() == other.left() and self.right() == other.right()
-    
+
+    def __hash__(self):
+        return hash((self._isleaf, self._children))
     
     def left(self):
         """

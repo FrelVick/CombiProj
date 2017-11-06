@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*
 from abc import ABCMeta, abstractmethod
-# from functools import lru_cache
+from functools import lru_cache
 import random
 
 #python-course.eu
@@ -75,13 +75,15 @@ class EpsilonRule(ConstantRule) :
             return [self._object]
         return []
     
-    @memoizeu
+    # @memoizeu
+    @lru_cache(maxsize=1000)
     def unrank(self, n, i):
         if i == 0 and n == 0 :
             return self._object
         raise ValueError("Epsilon rule UNRANK : only one object of weight and rank 0")
     
-    @memoizer
+    # @memoizer
+    @lru_cache(maxsize=1000)
     def rank(self, obj):
         if obj == self._object:
             return 0
@@ -126,13 +128,15 @@ class SingletonRule(ConstantRule) :
             return [self._object]
         return []
        
-    @memoizeu
+    # @memoizeu
+    @lru_cache(maxsize=1000)
     def unrank(self, n, i):
         if i == 0 and n == 1:
             return self._object
         raise ValueError("Singleton rule UNRANK : only one object of rank 0 and weight 1")
     
-    @memoizer
+    # @memoizer
+    @lru_cache(maxsize=1000)
     def rank(self, obj):
         if obj == self._object:
             return 0
@@ -221,7 +225,8 @@ class UnionRule(ConstructorRule):
         fst, snd = self.get_param_rules()
         return fst.list(i) + snd.list(i)
 
-    @memoizeu
+    # @memoizeu
+    @lru_cache(maxsize=1000)
     def unrank(self, n, i):
         if i >= self.count(n) :
             raise ValueError("Union rule UNRANK: rank is greater than the cardinal\
@@ -236,7 +241,8 @@ class UnionRule(ConstructorRule):
             # L'objet de rang i dérive de la seconde règle
             else:
                 return snd.unrank(n, i - fst.count(n))
-    @memoizer
+    # @memoizer
+    @lru_cache(maxsize=1000)
     def rank(self, obj):
         if (self._derive_from_first == None):
             raise NotImplementedError("To call rank, provide function as arg")
@@ -298,7 +304,8 @@ class ProductRule(ConstructorRule):
                         l.append(self._constructor([x, y]))
         return l
         
-    @memoizeu
+    # @memoizeu
+    @lru_cache(maxsize=1000)
     def unrank(self, n, i):
         if i >= self.count(n):
             raise ValueError("Product rule UNRANK :  rank is greater than the cardinal\
@@ -315,7 +322,8 @@ class ProductRule(ConstructorRule):
             j += 1
             i -= total
 
-    @memoizer
+    # @memoizer
+    @lru_cache(maxsize=1000)
     def rank(self, obj):
         if (self._get_pair == None):
             raise NotImplementedError("To call rank, provide function as arg")
@@ -356,7 +364,8 @@ class Bound:
             l += self._rule.list(i)
         return l
 
-    @memoizeu
+    # @memoizeu
+    @lru_cache(maxsize=1000)
     def unrank(self, i):
         if (i < 0):
             raise ValueError("Bound rule UNRANK : rank must be positive or null")
@@ -369,7 +378,8 @@ class Bound:
         raise ValueError("Bound rule UNRANK : rank is greater than the cardinal\
             of the set of objects")
 
-    @memoizer
+    @lru_cache(maxsize=1000)
+    # @memoizer
     def rank(self, obj):
         rank = 0
         for i in range (self._min, len(obj)):

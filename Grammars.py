@@ -168,21 +168,7 @@ ABCPalindrome = {
 #     "SS" : R.ProductRule("S", "S", "".join)
 # }
 
-# EvenGram = {
-#     "S" : R.UnionRule("Vide", "S1"),
-#     "Vide" : R.EpsilonRule(""),
-#     "AtomA" : R.SingletonRule("A"),
-#     "AtomB" : R.SingletonRule("B"),
-#     "S1" : R.UnionRule("M", "S2"),
-#     "S2" : R.UnionRule("N", "S3"),
-#     "S3" : R.UnionRule("MN", "NM"),
-#     "MN" : R.ProductRule("M", "N", "".join),
-#     "NM" : R.ProductRule("N", "M", "".join),
-#     "M" : R.ProductRule("AtomA", "Sb", "".join),
-#     "Sb" : R.ProductRule("S", "AtomB", "".join),
-#     "N" : R.ProductRule("AtomB", "Sa", "".join),
-#     "Sa" : R.ProductRule("S", "AtomA", "".join)
-# }
+
 
 
 """

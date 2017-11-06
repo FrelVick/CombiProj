@@ -2,8 +2,9 @@
 import math
 import Rules as R
 import Tree
-import GrammarsC
-import CRules as CR
+import Grammars
+import Rules as R
+
 
 class IncorrectGrammar(Exception):
 
@@ -70,7 +71,7 @@ fonction qui calcule la taille du langage engendré en fonction de n
 (pour les tests)
 """
 
-grammars = GrammarsC.grammars
+grammars = Grammars.grammars
 
 # Récupérer un dictionnaire associant à chaque règle de la grammaire
 # sa valuation
@@ -100,7 +101,7 @@ def tests (name, gram, rule_init, card_fun, n, valuation = []):
         print ("\nCardinality:")
         for i in range(n):
             count = rule.count(i)
-            # assert (count == card_fun(i))
+            assert (count == card_fun(i))
             assert (count == len(rule.list(i)))
         print ("Passed")
 
@@ -139,7 +140,7 @@ def tests (name, gram, rule_init, card_fun, n, valuation = []):
 
 for g in grammars:
     print (grammars[g][0])
-    grammars[g][0] = CR.dvp_gram(grammars[g][0])
+    # grammars[g][0] = CR.dvp_gram(grammars[g][0])
     init_grammar(grammars[g][0])
     tests(g, grammars[g][0], grammars[g][1], grammars[g][2], 4)
     # print (get_valuation(grammars[g][0]))
@@ -165,32 +166,32 @@ pour les test sur toutes les gram taille 8  1m20 vs 1m40'''
 
 ''' TESTS GRAMMAIRE CONDENSEE ''' 
 
-ng = {"Tree" : CR.Union (CR.Singleton (Tree.Leaf), 
-                         CR.Prod(CR.NonTerm ("Tree"), CR.NonTerm ("Tree"), 
-                                 lambda l : Tree.Node(l)))}
+# ng = {"Tree" : CR.Union (CR.Singleton (Tree.Leaf), 
+#                          CR.Prod(CR.NonTerm ("Tree"), CR.NonTerm ("Tree"), 
+#                                  lambda l : Tree.Node(l)))}
 
-# Version condensée
-DyckGram = {
-    "Dyck" : CR.Union(CR.Epsilon(""), CR.Prod(CR.NonTerm("Dyck"), CR.NonTerm("Cas(u"), "".join)), 
-    "Cas(u" : CR.Prod(CR.Singleton("("), CR.NonTerm("Casu)"), "".join),
-    "Casu)" :CR.Prod(CR.NonTerm("Dyck"), CR.Singleton(")"), "".join)
-}
+# # Version condensée
+# DyckGram = {
+#     "Dyck" : CR.Union(CR.Epsilon(""), CR.Prod(CR.NonTerm("Dyck"), CR.NonTerm("Cas(u"), "".join)), 
+#     "Cas(u" : CR.Prod(CR.Singleton("("), CR.NonTerm("Casu)"), "".join),
+#     "Casu)" :CR.Prod(CR.NonTerm("Dyck"), CR.Singleton(")"), "".join)
+# }
 
-# Version condensée avec Sequence
-DyckGram = {
-    "Dyck" : CR.Sequence ("Cas(u", "", "".join),
-    "Cas(u" : CR.Prod(CR.Singleton("("), CR.NonTerm("Casu)"), "".join),
-    "Casu)" :CR.Prod(CR.NonTerm("Dyck"), CR.Singleton(")"), "".join)
-}
+# # Version condensée avec Sequence
+# DyckGram = {
+#     "Dyck" : CR.Sequence ("Cas(u", "", "".join),
+#     "Cas(u" : CR.Prod(CR.Singleton("("), CR.NonTerm("Casu)"), "".join),
+#     "Casu)" :CR.Prod(CR.NonTerm("Dyck"), CR.Singleton(")"), "".join)
+# }
 
-g = CR.dvp_gram(DyckGram)
+# g = CR.dvp_gram(DyckGram)
 
-for k in g:
-    print (k, str(g[k]))
+# for k in g:
+#     print (k, str(g[k]))
 
-init_grammar(g)
+# init_grammar(g)
 
-print(g["Dyck"].list(6))
+# print(g["Dyck"].list(6))
 
 ''' TESTS GRAMMAIRE CONDENSEE '''
 
