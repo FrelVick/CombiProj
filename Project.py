@@ -88,7 +88,7 @@ def tests (name, gram, rule_init, card_fun, n, valuation = []):
     print ("\nTests on "+name)
     rule = gram[rule_init]
     try:
-
+        
         # V A L U A T I O N 
 
         if len(valuation) != 0:
@@ -113,6 +113,7 @@ def tests (name, gram, rule_init, card_fun, n, valuation = []):
             print ("Passed")
         except NotImplementedError:
             print ("Rank not available for this grammar")
+            
         # U N R A N K
 
         print("\nUnrank:")
@@ -142,7 +143,7 @@ for g in grammars:
     print (grammars[g][0])
     # grammars[g][0] = CR.dvp_gram(grammars[g][0])
     init_grammar(grammars[g][0])
-    tests(g, grammars[g][0], grammars[g][1], grammars[g][2], 4)
+    tests(g, grammars[g][0], grammars[g][1], grammars[g][2], 10)
     # print (get_valuation(grammars[g][0]))
     # print ((grammars[g][0][grammars[g][1]]).list(1))
 

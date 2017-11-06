@@ -26,7 +26,7 @@ def sep_last(s):
 treeGram = {
     "Tree" : R.UnionRule("Node", "Leaf", lambda t: not (t.is_leaf())),
     "Node" : R.ProductRule("Tree", "Tree",
-                           lambda l : Tree.Node(l), lambda t : (t.left(), t.right())),
+                           lambda a : Tree.Node(a[0], a[1]), lambda t : (t.left(), t.right())),
     "Leaf" : R.SingletonRule(Tree.Leaf)
 }
 

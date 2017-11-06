@@ -1,5 +1,5 @@
 """ FROM TP3 """
-class Node():
+class Tree():
     
     def __init__(self, children = None):
         """
@@ -15,7 +15,7 @@ class Node():
         if not self._isleaf:
             if len(children) != 2:
                 raise ValueError("A binary tree needs exactly two children")
-            self._children = tuple(c if isinstance(c,Node) else Node(c) for c in children)
+            self._children = tuple(c if isinstance(c,Tree) else Tree(c) for c in children)
         self._size = None
         
     def __repr__(self):
@@ -27,7 +27,7 @@ class Node():
         """
         Return true if other represents the same binary tree as self
         """
-        if not isinstance(other, Node):
+        if not isinstance(other, Tree):
             return False
         if self.is_leaf():
             return other.is_leaf()
@@ -82,4 +82,6 @@ class Node():
         else:
             return 1 + max(self.left().height(), self.right().height())
     
-Leaf = Node ()
+Leaf = Tree ()
+def Node(a,b) :
+    return Tree([a, b])

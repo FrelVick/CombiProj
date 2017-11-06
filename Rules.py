@@ -61,6 +61,7 @@ class EpsilonRule(ConstantRule) :
         return self.__valuation
 
     # La règle Epsilon ne produit qu'un seul objet qui est de poids 0
+    @lru_cache(maxsize=1000)
     def count(self, i):
         if i < 0 : 
             raise ValueError("Epsilon rule COUNT : Weight must be positive or null")
@@ -114,6 +115,7 @@ class SingletonRule(ConstantRule) :
     def valuation(self):
         return self.__valuation
 
+    @lru_cache(maxsize=1000)
     def count(self, i):
         if i < 0 : 
             raise ValueError("Singleton rule COUNT :Weight must be positive or null")
@@ -212,7 +214,8 @@ class UnionRule(ConstructorRule):
 
     def _calc_valuation(self, v1, v2):
         self._valuation =  min(v1, v2)
-       
+
+    @lru_cache(maxsize=1000)
     def count(self, i):
         if i < 0 : 
             raise ValueError("Union rule COUNT : Weight must be positive or null")
@@ -273,6 +276,7 @@ class ProductRule(ConstructorRule):
     def _calc_valuation(self, v1, v2):
         self._valuation =  v1 + v2
 
+    @lru_cache(maxsize=1000)
     def count(self, i):
         if i < 0 : 
             raise ValueError("Weight must be positive or null")
@@ -352,6 +356,7 @@ class Bound:
         self._min = min
         self._max = max
 
+    @lru_cache(maxsize=1000)
     def count(self):
         count = 0
         for i in range (self._min, self._max):
