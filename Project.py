@@ -3,7 +3,7 @@ import math
 import Rules as R
 import Tree
 import Grammars
-import Rules as R
+import CRules as CR
 
 
 class IncorrectGrammar(Exception):
@@ -107,6 +107,7 @@ def tests (name, gram, rule_init, card_fun, n, valuation = []):
 
         # R A N K
 
+        # MODIFIER FAIRE LES TESTS POUR 0 ... N
         try:
             print ("\nRank:")
             assert([rule.rank(i) for i in rule.list(n)] == list(range(rule.count(n))))
@@ -139,13 +140,13 @@ def tests (name, gram, rule_init, card_fun, n, valuation = []):
         print ("Not passed")
 
 
-for g in grammars:
-    print (grammars[g][0])
-    # grammars[g][0] = CR.dvp_gram(grammars[g][0])
-    init_grammar(grammars[g][0])
-    tests(g, grammars[g][0], grammars[g][1], grammars[g][2], 10)
-    # print (get_valuation(grammars[g][0]))
-    # print ((grammars[g][0][grammars[g][1]]).list(1))
+# for g in grammars:
+#     print (grammars[g][0])
+#     # grammars[g][0] = CR.dvp_gram(grammars[g][0])
+#     init_grammar(grammars[g][0])
+#     tests(g, grammars[g][0], grammars[g][1], grammars[g][2], 10)
+#     # print (get_valuation(grammars[g][0]))
+#     # print ((grammars[g][0][grammars[g][1]]).list(1))
 
 # g = "EvenGram"
 # grammars[g][0] = CR.dvp_gram(grammars[g][0])
@@ -178,19 +179,22 @@ pour les test sur toutes les gram taille 8  1m20 vs 1m40'''
 #     "Casu)" :CR.Prod(CR.NonTerm("Dyck"), CR.Singleton(")"), "".join)
 # }
 
-# # Version condensée avec Sequence
-# DyckGram = {
-#     "Dyck" : CR.Sequence ("Cas(u", "", "".join),
-#     "Cas(u" : CR.Prod(CR.Singleton("("), CR.NonTerm("Casu)"), "".join),
-#     "Casu)" :CR.Prod(CR.NonTerm("Dyck"), CR.Singleton(")"), "".join)
-# }
+# Version condensée avec Sequence
+DyckGram = {
+    "Dyck" : CR.Sequence ("Cas(u", "", "".join, Grammars.string_empty, Grammars.sep_dyck),
+    "Cas(u" : CR.Prod(CR.Singleton("("), CR.NonTerm("Casu)"), "".join, Grammars.sep_first),
+    "Casu)" :CR.Prod(CR.NonTerm("Dyck"), CR.Singleton(")"), "".join, Grammars.sep_last)
+}
 
-# g = CR.dvp_gram(DyckGram)
+g = CR.dvp_gram(DyckGram)
+init_grammar(g)
+
+
+tests("DyckGram", g, "Dyck", Grammars.dyck_count, 10)
 
 # for k in g:
 #     print (k, str(g[k]))
 
-# init_grammar(g)
 
 # print(g["Dyck"].list(6))
 

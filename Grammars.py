@@ -251,3 +251,7 @@ grammars = {
 
 def get_rule_init (g, name):
     return g[name][0][g[name][1]]
+
+def print_grammar(g):
+    for rule in g:
+        print(rule+" : "+str(g[rule]))
