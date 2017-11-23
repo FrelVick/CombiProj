@@ -406,7 +406,60 @@ AtomB * BSB1 & Pal * AtomB & AtomC * CSC1 & Pal * AtomC\\
 
 \subsection{Mots sur A,B qui contiennent autant de A que de B}
 
-TO DO
+\begin{table}[!hbt]
+\centering
+\small
+\setlength\tabcolsep{2pt}
+\begin{tabular}{|c|cccccccccc|}
+\hline $n$ & Vide & AtomA & AtomB & S & S1 & T & U & aTbS & TbS & bS\\
+\hline
+\hline règle & $\mathcal{E}$ & A & B &  $\mathcal{E}$ $\cup$ S1 &
+aTbS $\cup$ bUaS &  $\mathcal{E}$ $\cup$ aTbT &  $\mathcal{E}$ $\cup$
+bUaU & A * TbS & T * bS & B * S  \\
+\hline
+\hline
+0 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ &
+$\infty$ & $\infty$ & $\infty$  & $\infty$  \\
+1 & 0 & 1 & 1 & $\infty$ & $\infty$ & $\infty$ &
+$\infty$ & $\infty$ & $\infty$  & $\infty$  \\
+2 & 0 & 1 & 1 & 0 & $\infty$ & 0 &
+0 & $\infty$ & $\infty$  & $\infty$  \\
+3 & 0 & 1 & 1 & 0 & $\infty$ & 0 & 0 & $\infty$ & $\infty$  & 1  \\
+4 & 0 & 1 & 1 & 0 & $\infty$ & 0 & 0 & $\infty$ & 1 & 1  \\
+5 & 0 & 1 & 1 & 0 & $\infty$ & 0 & 0 & 2 & 1 & 1  \\
+6 & 0 & 1 & 1 & 0 & 2 & 0 & 0 & 2 & 1 & 1  \\
+7 & 0 & 1 & 1 & 0 & 2 & 0 & 0 & 2 & 1 & 1  \\
+
+\hline
+\end{tabular}
+
+\vspace{1cm}
+
+\begin{tabular}{|c|ccccccccc|}
+\hline $n$ & bUaS & UaS & aS & aTbT & TbT & bT & bUaU & UaU & aU \\
+\hline
+\hline règle & B * UaS  & U * aS & A * S & A * TbT & T * bT & B * T & B * UaU & U
+* aU & A * U\\
+\hline
+\hline
+0 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ &
+$\infty$  & $\infty$ & $\infty$ \\
+1 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ &
+$\infty$  & $\infty$ & $\infty$ \\
+2 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ &
+$\infty$  & $\infty$ & $\infty$ \\
+3 & $\infty$ &  $\infty$ & 1 & $\infty$ & $\infty$ & 1 &
+$\infty$  & $\infty$ & 1 \\
+4 & $\infty$ & 1 & 1 & $\infty$ & 1  & 1 &
+$\infty$  & 1 & 1 \\
+5 & 2 & 1 & 1 & 2 & 1 & 1 & 2  & 1 & 1 \\
+6 & 2 & 1 & 1 & 2 & 1 & 1 & 2  & 1 & 1 \\
+7 & 2 & 1 & 1 & 2 & 1 & 1 & 2  & 1 & 1 \\
+
+\hline
+\end{tabular}
+\end{table}
+
 
 \section{Fonction qui vérifie qu'une grammaire est correcte}
 
