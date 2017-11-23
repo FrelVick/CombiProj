@@ -165,6 +165,62 @@ EvenGram = {
     "Sa" : CR.Prod(CR.NonTerm("S"), CR.Singleton("A"), "".join, sep_last)
 } 
 
+
+EvenGram = {
+    
+    "S" : CR.Union(CR.Epsilon(""), CR.NonTerm("T"), string_empty),
+    "T" : CR.Union(CR.NonTerm("M"), CR.NonTerm("S2"), lambda s : s[0] == 'A' and s[-1] == 'B'),
+    "S2" : CR.Union(CR.NonTerm("N"), CR.NonTerm("S3"), lambda s : s[0] == 'B' and s[-1] == 'A'),
+    "S3" : CR.Union(CR.NonTerm("MN"), CR.NonTerm("S4"), lambda s : s[0] == 'A'),
+    "S4" : CR.Union(CR.NonTerm("NM"), CR.NonTerm("S5")),
+    "S5" : CR.Union(CR.NonTerm("AB"), CR.NonTerm("BA")),
+    "AB" : CR.Prod(CR.Singleton("A"), CR.Singleton("B"), "".join),
+    "BA" : CR.Prod(CR.Singleton("B"), CR.Singleton("A"), "".join),
+    "MN" : CR.Prod(CR.NonTerm("M"), CR.NonTerm("N"), "".join, lambda s : sep_even(s, 'B')),
+    "NM" : CR.Prod(CR.NonTerm("N"), CR.NonTerm("M"), "".join, lambda s : sep_even(s, 'A')),
+    "M" : CR.Prod(CR.Singleton("A"), CR.NonTerm("Tb"), "".join, sep_first),
+    "Tb" : CR.Prod(CR.NonTerm("T"), CR.Singleton("B"), "".join, sep_last),
+    "N" : CR.Prod(CR.Singleton("B"), CR.NonTerm("Ta"), "".join, sep_first),
+    "Ta" : CR.Prod(CR.NonTerm("T"), CR.Singleton("A"), "".join, sep_last)
+}
+
+EvenGram = {
+    
+    "S" : CR.Union(CR.Epsilon(""), CR.NonTerm("T"), string_empty),
+    "T" : CR.Union(CR.NonTerm("M"), CR.NonTerm("S2"), lambda s : s[0] == 'A' and s[-1] == 'B'),
+    "S2" : CR.Union(CR.NonTerm("N"), CR.NonTerm("S3"), lambda s : s[0] == 'B' and s[-1] == 'A'),
+    "S3" : CR.Union(CR.NonTerm("MN"), CR.NonTerm("NM"), lambda s : s[0] == 'A'),
+    "AB" : CR.Prod(CR.Singleton("A"), CR.Singleton("B"), "".join),
+    "BA" : CR.Prod(CR.Singleton("B"), CR.Singleton("A"), "".join),
+    "MN" : CR.Prod(CR.NonTerm("M"), CR.NonTerm("N"), "".join, lambda s : sep_even(s, 'B')),
+    "NM" : CR.Prod(CR.NonTerm("N"), CR.NonTerm("M"), "".join, lambda s : sep_even(s, 'A')),
+    "M" : CR.Union(CR.NonTerm("mm"), CR.NonTerm("AB")),
+    "mm" : CR.Prod(CR.Singleton("A"), CR.NonTerm("Tb"), "".join, sep_first),
+    "Tb" : CR.Prod(CR.NonTerm("T"), CR.Singleton("B"), "".join, sep_last),
+    "N" : CR.Union(CR.NonTerm("BA"), CR.NonTerm("nn")),
+    "nn" : CR.Prod(CR.Singleton("B"), CR.NonTerm("Ta"), "".join, sep_first),
+    "Ta" : CR.Prod(CR.NonTerm("T"), CR.Singleton("A"), "".join, sep_last)
+}
+
+EvenGram = {
+    
+    "U" : CR.Union(CR.Epsilon(""), CR.NonTerm("S"), string_empty),
+    "S" : CR.Union(CR.NonTerm("aSb"), CR.NonTerm("S2"), lambda s : s[0] == 'A' and s[-1] == 'B'),
+    "S2" : CR.Union(CR.NonTerm("bSa"), CR.NonTerm("S3"), lambda s : s[0] == 'B' and s[-1] == 'A'),
+    "S3" : CR.Union(CR.NonTerm("abT"), CR.NonTerm("baT"), lambda s : s[0] == 'B' and s[-1] == 'A'),  
+    "aSb" : CR.Prod(CR.Singleton("A"), CR.NonTerm("Sb"), "".join),
+    "Sb" :  CR.Prod(CR.NonTerm("S"), CR.Singleton("B"), "".join),
+    "bSa": CR.Prod(CR.Singleton("B"), CR.NonTerm("Sa"), "".join),
+    "Sa" : CR.Prod (CR.NonTerm("S"), CR.Singleton("A"), "".join),
+   
+    "abT" : CR.Union(CR.NonTerm("AB"), CR.NonTerm("T")),
+    "AB" : CR.Prod(CR.Singleton("A"), CR.Singleton("B"), "".join),
+    "BA" : CR.Prod(CR.Singleton("B"), CR.Singleton("A"), "".join),
+    "baT" : CR.Prod(CR.NonTerm("BA"), CR.NonTerm("T"), "".join),
+ 
+    "T" : CR.Union(CR.NonTerm("S"), CR.Epsilon(""))
+}
+
 """
 FONCTIONS CARDINALITE (pour les tests) 
 """
@@ -232,7 +288,7 @@ def two_count (n):
 
 grammars = {
 
-    "EvenGram" : [EvenGram, "S", lambda n : n],
+    "EvenGram" : [EvenGram, "U", lambda n : n],
     # "treeGram"  : [treeGram, "Tree", tree_count],
     # "fiboGram"  : [fiboGram, "Fib", lambda n : fibo_count(n+2)],
     # "ABGram"    : [ABGram, "AB", lambda n: 2**n],

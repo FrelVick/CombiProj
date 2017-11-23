@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*
 from abc import ABCMeta, abstractmethod
-from functools import lru_cache
+#from functools import lru_cache
 import random
 
 #python-course.eu
@@ -61,7 +61,7 @@ class EpsilonRule(ConstantRule) :
         return self.__valuation
 
     # La règle Epsilon ne produit qu'un seul objet qui est de poids 0
-    @lru_cache(maxsize=1000)
+    #@lru_cache(maxsize=1000)
     def count(self, i):
         if i < 0 : 
             raise ValueError("Epsilon rule COUNT : Weight must be positive or null")
@@ -77,14 +77,14 @@ class EpsilonRule(ConstantRule) :
         return []
     
     # @memoizeu
-    @lru_cache(maxsize=1000)
+    #@lru_cache(maxsize=1000)
     def unrank(self, n, i):
         if i == 0 and n == 0 :
             return self._object
         raise ValueError("Epsilon rule UNRANK : only one object of weight and rank 0")
     
     # @memoizer
-    @lru_cache(maxsize=1000)
+    #@lru_cache(maxsize=1000)
     def rank(self, obj):
         if obj == self._object:
             return 0
@@ -115,7 +115,7 @@ class SingletonRule(ConstantRule) :
     def valuation(self):
         return self.__valuation
 
-    @lru_cache(maxsize=1000)
+    #@lru_cache(maxsize=1000)
     def count(self, i):
         if i < 0 : 
             raise ValueError("Singleton rule COUNT :Weight must be positive or null")
@@ -131,14 +131,14 @@ class SingletonRule(ConstantRule) :
         return []
        
     # @memoizeu
-    @lru_cache(maxsize=1000)
+    #@lru_cache(maxsize=1000)
     def unrank(self, n, i):
         if i == 0 and n == 1:
             return self._object
         raise ValueError("Singleton rule UNRANK : only one object of rank 0 and weight 1")
     
     # @memoizer
-    @lru_cache(maxsize=1000)
+    #@lru_cache(maxsize=1000)
     def rank(self, obj):
         if obj == self._object:
             return 0
@@ -215,11 +215,12 @@ class UnionRule(ConstructorRule):
     def _calc_valuation(self, v1, v2):
         self._valuation =  min(v1, v2)
 
-    @lru_cache(maxsize=1000)
+    #@lru_cache(maxsize=1000)
     def count(self, i):
         if i < 0 : 
             raise ValueError("Union rule COUNT : Weight must be positive or null")
         r0, r1 = self.get_param_rules()
+        print(str(r0), str(r1))
         return r0.count(i) + r1.count(i)
 
     def list(self, i):
@@ -229,7 +230,7 @@ class UnionRule(ConstructorRule):
         return fst.list(i) + snd.list(i)
 
     # @memoizeu
-    @lru_cache(maxsize=1000)
+    #@lru_cache(maxsize=1000)
     def unrank(self, n, i):
         if i >= self.count(n) :
             raise ValueError("Union rule UNRANK: rank is greater than the cardinal\
@@ -245,7 +246,7 @@ class UnionRule(ConstructorRule):
             else:
                 return snd.unrank(n, i - fst.count(n))
     # @memoizer
-    @lru_cache(maxsize=1000)
+    #@lru_cache(maxsize=1000)
     def rank(self, obj):
         if (self._derive_from_first == None):
             raise NotImplementedError("To call rank, provide function as arg")
@@ -276,7 +277,7 @@ class ProductRule(ConstructorRule):
     def _calc_valuation(self, v1, v2):
         self._valuation =  v1 + v2
 
-    @lru_cache(maxsize=1000)
+    #@lru_cache(maxsize=1000)
     def count(self, i):
         if i < 0 : 
             raise ValueError("Weight must be positive or null")
@@ -309,7 +310,7 @@ class ProductRule(ConstructorRule):
         return l
         
     # @memoizeu
-    @lru_cache(maxsize=1000)
+    #@lru_cache(maxsize=1000)
     def unrank(self, n, i):
         if i >= self.count(n):
             raise ValueError("Product rule UNRANK :  rank is greater than the cardinal\
@@ -327,7 +328,7 @@ class ProductRule(ConstructorRule):
             i -= total
 
     # @memoizer
-    @lru_cache(maxsize=1000)
+    #@lru_cache(maxsize=1000)
     def rank(self, obj):
         if (self._get_pair == None):
             raise NotImplementedError("To call rank, provide function as arg")
@@ -356,7 +357,7 @@ class Bound:
         self._min = min
         self._max = max
 
-    @lru_cache(maxsize=1000)
+    #@lru_cache(maxsize=1000)
     def count(self):
         count = 0
         for i in range (self._min, self._max):
@@ -370,7 +371,7 @@ class Bound:
         return l
 
     # @memoizeu
-    @lru_cache(maxsize=1000)
+    #@lru_cache(maxsize=1000)
     def unrank(self, i):
         if (i < 0):
             raise ValueError("Bound rule UNRANK : rank must be positive or null")
@@ -383,7 +384,7 @@ class Bound:
         raise ValueError("Bound rule UNRANK : rank is greater than the cardinal\
             of the set of objects")
 
-    @lru_cache(maxsize=1000)
+    #@lru_cache(maxsize=1000)
     # @memoizer
     def rank(self, obj):
         rank = 0
