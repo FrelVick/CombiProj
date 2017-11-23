@@ -220,7 +220,6 @@ class UnionRule(ConstructorRule):
         if i < 0 : 
             raise ValueError("Union rule COUNT : Weight must be positive or null")
         r0, r1 = self.get_param_rules()
-        print(str(r0), str(r1))
         return r0.count(i) + r1.count(i)
 
     def list(self, i):

@@ -3,6 +3,7 @@ import math
 import Rules as R
 import Tree
 import Grammars
+import GrammarsC as GC
 import CRules as CR
 
 
@@ -179,24 +180,31 @@ pour les test sur toutes les gram taille 8  1m20 vs 1m40'''
 #     "Casu)" :CR.Prod(CR.NonTerm("Dyck"), CR.Singleton(")"), "".join)
 # }
 
-# Version condensée avec Sequence
-DyckGram = {
-    "Dyck" : CR.Sequence ("Cas(u", "", "".join, Grammars.string_empty, Grammars.sep_dyck),
-    "Cas(u" : CR.Prod(CR.Singleton("("), CR.NonTerm("Casu)"), "".join, Grammars.sep_first),
-    "Casu)" :CR.Prod(CR.NonTerm("Dyck"), CR.Singleton(")"), "".join, Grammars.sep_last)
-}
+# Version condens# ée avec Sequence
+# DyckGram = {
+#     "Dyck" : CR.Sequence ("Cas(u", "", "".join, Grammars.string_empty, Grammars.sep_dyck),
+#     "Cas(u" : CR.Prod(CR.Singleton("("), CR.NonTerm("Casu)"), "".join, Grammars.sep_first),
+#     "Casu)" :CR.Prod(CR.NonTerm("Dyck"), CR.Singleton(")"), "".join, Grammars.sep_last)
+# }
 
-g = CR.dvp_gram(DyckGram)
-init_grammar(g)
-
-
-tests("DyckGram", g, "Dyck", Grammars.dyck_count, 10)
-
-# for k in g:
-#     print (k, str(g[k]))
+# g = CR.dvp_gram(DyckGram)
+# init_grammar(g)
 
 
-# print(g["Dyck"].list(6))
+# tests("DyckGram",
+      # g, "Dyck", Grammars.dyck_count, 10)
+
+
+gc = GC.grammars["EvenGram"][0]
+# print(gc)
+gc = CR.dvp_gram(gc)
+# print(gc)
+init_grammar(gc)
+d = {}
+for i in range(12):
+    l = (gc["S"].count(i))
+    print(l)
+
 
 ''' TESTS GRAMMAIRE CONDENSEE '''
 
