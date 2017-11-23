@@ -8,6 +8,9 @@
 \usepackage{verbatim}         % texte préformaté
 \usepackage{hhline}
 \usepackage{flafter} 
+\usepackage[section]{placeins}
+\usepackage{listings}
+\lstset{language=Python }
 
 \title{Rapport projet Combinatoire}      
 \author{-}         
@@ -122,8 +125,13 @@ $w$ est un mot de la grammaire des palindrome sur $A$, $B$ si:
 
 \subsection{Mots sur l'alphabet A,B qui contiennent autant de A que de
 B}
+\medskip
+$ S\ =\ \mathcal{E}\ |\ aTbS\ |\ bUaS$
 
-... 
+$ T\ =\ \mathcal{E}\ |\ aTbT$
+
+$ U\ =\ \mathcal{E}\ |\ bTaT$
+
 
 \section{Calcul de la valuation}
 
@@ -148,8 +156,9 @@ AtomB & $\mathcal{E}$ & AtomA*Fib & A & B & AtomB*CasAu\\
 \end{tabular}
 \end{table}
 
-\begin{table}[!hbt]
+\newpage
 \subsection{Mots de Dyck}
+\begin{table}[!hbt]
 \centering
 \small
 \setlength\tabcolsep{2pt}
@@ -172,6 +181,8 @@ AtomB & $\mathcal{E}$ & AtomA*Fib & A & B & AtomB*CasAu\\
 
 \end{tabular}
 \end{table}
+
+
 
 
 \begin{table}[!hbt]
@@ -254,6 +265,7 @@ $\infty$ & $\infty$  \\
 \end {tabular}
 \end{table}
 
+\newpage
 \begin{table}[!hbt]
 \subsection{Palindromes sur A,B}
 \centering
@@ -321,6 +333,7 @@ AtomB * BSB1 & Pal * AtomB\\
 \hline
 \end{tabular}
 
+
 \vspace{1cm}
 
 \begin{tabular}{|c|ccccccc|}
@@ -344,25 +357,138 @@ AtomB * BSB1 & Pal * AtomB & AtomC * CSC1 & Pal * AtomC\\
 
 \end{table}
 
+\newpage
+
+\subsection{Palindromes sur A,B,C}
+
+\begin{table}[!hbt]
+\centering
+\small
+\setlength\tabcolsep{2pt}
+\begin{tabular}{|c|ccccccccc|}
+\hline $n$ & Pal & Vide & AtomA & AtomB & AtomC & S & S1 & S2 & S3\\
+\hline
+\hline règle & Vide $\cup$ S & $\mathcal{E}$ & A & B & C & AtomA $\cup$ S1
+& AtomB $\cup$ S2 & AtomC $\cup$ S3 & ASA $\cup$ S4 \\
+\hline
+\hline
+0 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ \\
+1 & $\infty$ & 0 & 1 & 1 & 1 & $\infty$ & $\infty$ & $\infty$ & $\infty$ \\
+2 & 0 & 0 & 1 & 1 & 1 & 1 & 1 & 1 & $\infty$ \\
+3 & 0 & 0 & 1 & 1 & 1 & 1 & 1 & 1 & $\infty$ \\
+4 & 0 & 0 & 1 & 1 & 1 & 1 & 1 & 1 & $\infty$ \\
+5 & 0 & 0 & 1 & 1 & 1 & 1 & 1 & 1 & 2 \\
+6 & 0 & 0 & 1 & 1 & 1 & 1 & 1 & 1 & 2 \\
+
+\hline
+\end{tabular}
+
+\vspace{1cm}
+
+\begin{tabular}{|c|ccccccc|}
+\hline $n$  & S4 & ASA & ASA1 & BSB & BSB1 & CSC & CSC1  \\
+\hline
+\hline règle & BSB $\cup$ CSC & AtomA * ASA1 & Pal * AtomA &
+AtomB * BSB1 & Pal * AtomB & AtomC * CSC1 & Pal * AtomC\\
+\hline
+\hline
+0 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ \\
+1 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ \\
+2 & $\infty$ &  $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ \\
+3 & $\infty$ &  $\infty$ & 1 & $\infty$ & 1 & $\infty$ & 1 \\
+4 & $\infty$ &  2 & 1 & 2 & 1 & 2 & 1 \\
+5 & 2 & 2 & 1 & 2 & 1 & 2 & 1 \\
+6 & 2 & 2 & 1 & 2 & 1 & 2 & 1 \\
+
+\hline
+\end{tabular}
+\end{table}
+
 \subsection{Mots sur A,B qui contiennent autant de A que de B}
-...
+
+TO DO
+
+\section{Fonction qui vérifie qu'une grammaire est correcte}
+
+Pour vérifier qu'une grammaire est correcte, on parcourt toutes les
+règles de la grammaire et pour chaque règle, s'il s'agit d'une règle
+de type ConstructorRule, on vérifie si les deux règles qu'elle possède
+en attributs sont définies dans la grammaire.
+
+ADD STYLE
+
+\begin{lstlisting}
+  def checkDefinedRules (grammar):
+     for ruleId in grammar:
+     rule = grammar[ruleId]
+     if isinstance(rule, R.ConstructorRule):
+     fst, snd = rule.parameters
+     if not (fst in grammar):
+     raise IncorrectGrammar(fst+" rule not defined in grammar")
+     if not (snd in grammar):
+     raise IncorrectGrammar(snd+" rule not defined in grammar")
+\end{lstlisting}
+
+\section {Structure du programme}
+
 \section{Tests de cohérence génériques}
 
-\section{A faire pour le rapport}
+Les propriétés suivantes doivent etres vérifiées par les grammaires :\\
 \begin{itemize}
-\item Ajouter la fonction check grammar et expliquer
-\item Ecrire la spec des test
-\item Expliquer rank (par exemple avec Dyckgram)
-\item Expliquer caching plus comparaison avec et sans
-\item Grammaires condensées
-\item Bound
-\item Sequence
+\item Pour toute règle r d'une grammaire, pour tout entier n positif ou
+  nul, \\ r.count(n) == len(r.list(n))
+\item ([rule.rank(i) for i in rule.list(n)] ==
+  list(range(rule.count(n))))
+\item ([rule.rank(i) for i in rule.list(n)] == list(range(rule.count(n))))
+\item Pour chaque règle d'une grammaire la valeur de la valuation
+  calculée, correspond au plus petit mot produit par la règle
+\item Si r est une EpsilonRule alors count(n) avec n différent 0
+  retourne 0 sinon 1
+\item Si r est une SingletonRule alors count(n) avec n différent de
+  1 retourne 0 sinon 1
+\item Pour toutes les fonctions, pour toutes les règles n négatif
+  provoque une exception
+\item Pour la fonction count on compare avec les suites connues
+  (ajouter ref oeis)
+\item Lors du calcul de la valuation on vérifie qu'aucune valuation
+  n'a la valeur $\infty$
+
 \end{itemize}
-\section{A faire dans le prog}
-\begin{itemize}
-\item test grammaires condensées
-\item test bound
-\item test sequence
-\end{itemize}
+
+\section {Ajout count, random, list,  unrank}
+on implémente les algos de l'énoncé en ajoutant vérification cas < 0
+
+\section {Ajout rank}
+
+Montrer le code
+Expliquer la modification des paramètres avec valeur = None possible
+Expliquer comment construire les fonctions avec 2 exemples
+-> DyckGram
+-> AB
+
+\section{Caching}
+Comparaison temps exec avec caching et sans
+Comparaison temps en fonction des fonctions mémoisées
+Comparaison mémoisation python2 vs python3 ?
+
+\section{Ajout des Grammaires Condensées}
+Expliquer traduction
+Création de nom de règle
+-> Grammaires condensées dans GrammarsC (pas totalement pour
+lisibilité)
+On execute les test sur les GrammarsC
++ Eventuellement comparaison des résultats GrammairesCondensées vs
+GrammairesNonCondensées.
+
+\section{Constructeur Bound}
+Explication
+- list concat
+- count sum
+- unrank et rank
+Créer tests ?
+
+\section {Sequence}
+Montrer traduction
+Montrer utilisation pour réécriture de DyckGram
 
 \end{document}
