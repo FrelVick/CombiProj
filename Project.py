@@ -52,7 +52,7 @@ def init_grammar (grammar):
             rule._update_valuation()
             val_after[rule] = rule.valuation()
    
-    # Si on atteint un point fixe pour lequel une des règles à une valuation infine,
+    # Si on atteint un point fixe pour lequel une des règles à une valuation infinie,
     # la grammaire est mal construite
     for rule_id in grammar:
         if grammar[rule_id].valuation() == float('inf'):
@@ -141,13 +141,13 @@ def tests (name, gram, rule_init, card_fun, n, valuation = []):
         print ("Not passed")
 
 
-# for g in grammars:
-#     print (grammars[g][0])
-#     # grammars[g][0] = CR.dvp_gram(grammars[g][0])
-#     init_grammar(grammars[g][0])
-#     tests(g, grammars[g][0], grammars[g][1], grammars[g][2], 10)
-#     # print (get_valuation(grammars[g][0]))
-#     # print ((grammars[g][0][grammars[g][1]]).list(1))
+for g in grammars:
+    print (grammars[g][0])
+    # grammars[g][0] = CR.dvp_gram(grammars[g][0])
+    init_grammar(grammars[g][0])
+#     tests(g, grammars[g][0], grammars[g][1], grammars[g][2], 6)
+    print (get_valuation(grammars[g][0]))
+    # print ((grammars[g][0][grammars[g][1]]).list(1))
 
 # g = "EvenGram"
 # grammars[g][0] = CR.dvp_gram(grammars[g][0])
@@ -195,17 +195,23 @@ pour les test sur toutes les gram taille 8  1m20 vs 1m40'''
       # g, "Dyck", Grammars.dyck_count, 10)
 
 
-gc = GC.grammars["EvenGram"][0]
-# print(gc)
-gc = CR.dvp_gram(gc)
-# print(gc)
-init_grammar(gc)
-d = {}
-for i in range(12):
-    l = (gc["S"].count(i))
-    print(l)
+# gc = GC.grammars["EvenGram"][0]
+# # print(gc)
+# gc = CR.dvp_gram(gc)
+# # print(gc)
+# init_grammar(gc)
+# d = {}
+# for i in range(12):
+#     l = (gc["S"].count(i))
+#     print(l)
 
 
+
+# init_grammar(grammars["EqualGram"][0])
+# l = (grammars["EqualGram"][0]["S"].list(6))
+# for m in l:
+#     print (m)
+#     print (grammars["EqualGram"][0]["S"].rank(m))
 ''' TESTS GRAMMAIRE CONDENSEE '''
 
 ''' TESTS BOUND '''

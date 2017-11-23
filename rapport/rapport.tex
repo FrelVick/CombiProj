@@ -1,7 +1,6 @@
 \documentclass[a4paper, titlepage]{article}
 
 \usepackage[utf8]{inputenc} % accents
-\usepackage[T1]{fontenc}      % caractères français
 \usepackage{geometry}         % marges
 \usepackage[frenchb]{babel}  % langue
 \usepackage{graphicx}         % images
@@ -10,7 +9,27 @@
 \usepackage{flafter} 
 \usepackage[section]{placeins}
 \usepackage{listings}
-\lstset{language=Python }
+\usepackage{color}
+\usepackage[dvipsnames]{xcolor}
+
+\lstset{language=python,
+	  	basicstyle=\ttfamily,
+        	        keywordstyle=\color{ForestGreen}\ttfamily,
+        	        stringstyle=\color{BrickRed}\ttfamily,
+        	        commentstyle=\color{Periwinkle}\ttfamily,
+        	        morecomment=[l][\color{magenta}]{\#},
+                        emph={checkDefinedRules},          % Custom highlighting
+                        emphstyle=\ttb\color{MidnightBlue},    
+        	        	frame =tBlR ,rulesep =1mm ,framesep =5mm,framerule =2pt, 
+        	        	xrightmargin =-2mm,xleftmargin =5mm ,rulecolor ={\color [gray]	{0.6}},rulesepcolor={\color [gray]{0.9}}
+                	}
+\lstset{
+   basicstyle=\ttfamily
+}
+
+\renewcommand{\lstlistingname}{Extrait de code}
+\renewcommand{\lstlistlistingname}{List of \lstlistingname s}
+
 
 \title{Rapport projet Combinatoire}      
 \author{-}         
@@ -468,48 +487,100 @@ règles de la grammaire et pour chaque règle, s'il s'agit d'une règle
 de type ConstructorRule, on vérifie si les deux règles qu'elle possède
 en attributs sont définies dans la grammaire.
 
-ADD STYLE
-
+\lstset{caption={}, captionpos=b} 
 \begin{lstlisting}
-  def checkDefinedRules (grammar):
-     for ruleId in grammar:
+def checkDefinedRules (grammar):
+   for ruleId in grammar:
      rule = grammar[ruleId]
      if isinstance(rule, R.ConstructorRule):
-     fst, snd = rule.parameters
-     if not (fst in grammar):
-     raise IncorrectGrammar(fst+" rule not defined in grammar")
-     if not (snd in grammar):
-     raise IncorrectGrammar(snd+" rule not defined in grammar")
+       fst, snd = rule.parameters
+       if not (fst in grammar):
+         raise IncorrectGrammar(fst+" rule not defined in grammar")
+       if not (snd in grammar):
+         raise IncorrectGrammar(snd+" rule not defined in grammar")
 \end{lstlisting}
 
 \section {Structure du programme}
 
-\section{Tests de cohérence génériques}
-
-Les propriétés suivantes doivent etres vérifiées par les grammaires :\\
+Le projet est composé de 7 fichiers, et a été développé avec Python 3.5:\\
 \begin{itemize}
-\item Pour toute règle r d'une grammaire, pour tout entier n positif ou
-  nul, \\ r.count(n) == len(r.list(n))
-\item ([rule.rank(i) for i in rule.list(n)] ==
-  list(range(rule.count(n))))
-\item ([rule.rank(i) for i in rule.list(n)] == list(range(rule.count(n))))
-\item Pour chaque règle d'une grammaire la valeur de la valuation
-  calculée, correspond au plus petit mot produit par la règle
-\item Si r est une EpsilonRule alors count(n) avec n différent 0
-  retourne 0 sinon 1
-\item Si r est une SingletonRule alors count(n) avec n différent de
-  1 retourne 0 sinon 1
-\item Pour toutes les fonctions, pour toutes les règles n négatif
-  provoque une exception
-\item Pour la fonction count on compare avec les suites connues
-  (ajouter ref oeis)
-\item Lors du calcul de la valuation on vérifie qu'aucune valuation
-  n'a la valeur $\infty$
-
+\item Rules.py : contient les classes AbstractRule, ConstructorRule,
+  ConstantRule, UnionRule, ProductRule, SingletonRule, EpsilonRule\\
+\item Grammars.py : contient la déclaration des grammaires de la
+  question 2.2, des fonctions qui calculent des suites qui
+  correspondent au nombre d'objets créés par une grammaire (ce point
+  est expliqué plus en détail dans la partie suivante) ainsi qu'un dictionnaire qui associe à un nom de
+  grammaire une liste qui contient la grammaire, la première règle de
+  la grammaire et une fonction qui calcule la cardinalité.\\
+\item CRules.py : contient les classes permettant d'implémenter les
+  grammaires condensées (plus de détails dans la partie ??\\
+\item GrammarsC.py : contient les déclarations de grammaires
+  condensées. ?? Pas au max pour lisibilité\\
+\item Tree.py : contient la classe BinaryTree du TP3\\
+\item Project.py : contient les fonctions permettant d'initialiser les
+  grammaires et les tests\\
+\item Demo.ipynb : contenu similaire à Project.py sous forme de
+  notebook pour la démonstration\\
+  
 \end{itemize}
 
-\section {Ajout count, random, list,  unrank}
-on implémente les algos de l'énoncé en ajoutant vérification cas < 0
+\section{Tests de cohérence génériques}
+
+Pour toute règle $r$ d'une grammaire, pour tout entier $n$ positif ou
+nul, les propriétés suivantes doivent être vérifiées :
+\begin{itemize}
+\item La longueur de la list générée par $r.list(n)$ doit être égale
+  a $r.count(n)$\\
+  
+\item Si on applique la fonction $r.rank$ à chaque élement de la liste
+  générée par $r.list(n)$, on doit obtenir une liste égale à
+  $list(range(r.count(n))$\\
+  
+\item Si on applique la fonction $r.unrank$ à chaque élément de la
+  liste $range(r.count(n))$, on doit obtenir une liste égale à $r.list(n)$\\
+  
+\item On ne peut pas générer de
+  mots ayant une taille inférieure à la valeur de la valuation de la
+  règle\\
+  
+\item Pour toutes les fonctions, pour toutes les règles, un paramètre négatif
+  provoque une exception.\\
+
+\item Aucune règle ne doit avoir pour valuation $\infty$\\
+
+\item Si $r$ est une $EpsilonRule$ alors $count(n) = 0\ si\ n \neq 0$
+  et $count(n) = 1$ sinon \\
+  
+\item Si $r$ est une $SingletonRule$ alors $count(n) = 0\ si\ n \neq
+  1$ et $count(n)=1$ sinon \\
+
+\item Un appel à $r.unrank(n, i)$ avec $i \geq r.count(n)$ doit provoquer
+  une exception\\
+
+\item Un appel à $r.rank(obj)$ où $r$ est une règle de type
+  $ConstantRule$ provoque une exception si $obj$ n'est pas égal à
+  l'objet passé en argument au constructeur de la règle.\\
+  
+\item S'il existe une suite $U_n$ qui dénombre les objets de la
+  grammaire, alors $\forall n \geq 0$, on doit avoir $U_n =
+  r.count(n)$\\
+  ?? AJOUTER GRAMMAIRE -> SUITES OEIS
+  
+\end{itemize}
+
+\section {Ajout valuation, count, random, list,  unrank}
+
+Pour le calcul des valuations d'une grammaire, on parcourt toutes les
+règles en mettant à jour les valuations pour les règles de type
+$ConstructorRule$ en boucle (puisque les valuations des règles de type
+$ConstantRule$ sont constantes) jusqu'à atteindre un point fixe.
+Les règles de type $ConstructorRule$ possèdent deux méthodes :
+get\_valuation qui retoune la valeur de l'attribut valuation, et
+update\_valuation qui met à jour la valuation. \\
+
+Pour les autres fonctions (count, random, list, unrank), on implémente
+les algorithmes de l'énoncé en ajoutant des vérifications pour
+respecter la spécification décrite dans la partie précédente.
 
 \section {Ajout rank}
 

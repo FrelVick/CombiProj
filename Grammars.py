@@ -154,21 +154,86 @@ ABCPalindrome = {
     "CSC1"  : R.ProductRule("Pal", "AtomC", "".join, sep_last),
 }
 
-# EvenGram = {
-#     "S" : R.UnionRule("Vide", "S1"),
-#     "Vide" : R.EpsilonRule(""),
-#     "AtomA" : R.SingletonRule("A"),
-#     "AtomB" : R.SingletonRule("B"),
-#     "S1" : R.UnionRule("aSb", "S2"),
-#     "S2" : R.UnionRule("bSa", "SS"),
-#     "aSb" : R.ProductRule("AtomA", "Sb", "".join),
-#     "Sb" : R.ProductRule("S", "AtomB", "".join),
-#     "bSa" : R.ProductRule("AtomB", "Sa", "".join),
-#     "Sa" : R.ProductRule("S", "AtomA", "".join),
-#     "SS" : R.ProductRule("S", "S", "".join)
-# }
+def sep_first_char (s, c):
+    print("First Char")
+    # if s == c:
+    #     return (c,"")
+  
+    for i in range (len(s)):
+        print ("test", s[i], c, i)
+        if s[i] == c:
+            print (s[:i], s[i:])
+            if i > 0:
+                return (s[:i+1], s[i+1:])
+            return(s[:i], s[i:])
 
+def sep_last_char (s, c):
+    print("Last char", s , c)
+    # if s == c:
+    #     return ("", c)
+    
+    for i in range (len(s) - 1, -1, -1):
+        print ("test", s[i], c)
+        if s[i] == c:
+            print (s[:i], s[i:])
+            if i > 0:
+                return (s[:i+1], s[i+1:])
+            return(s[:i], s[i:])
 
+def helper (s, c):
+    print (s, c, "helper")
+    if s == c:
+        return ("", s)
+    if s[0] == c:
+        print (s[0], s[1:])
+        return ("", s)
+        return (s[0], s[1:])
+    else:
+        print (s[:len(s)-1], s[len(s)-1])
+        return (s[:len(s)-1], s[len(s)-1])
+        return (s, "")
+
+# def rev_helper (s, c):
+#     print (s, c, "rec")
+#     if s == c:
+#         return ("", s)
+#     if s[0] == c:
+#         print (s[0], s[1:])
+#         return ("", s)
+#         return (s[0], s[1:])
+#     else:
+#         print (s[:len(s)-1], s[len(s)-1])
+#         return (s[:len(s)-1], s[len(s)-1])
+#         return (s, "")
+
+EqualGram = {
+    "Vide" : R.EpsilonRule(""),
+    "A"    : R.SingletonRule("A"),
+    "B"    : R.SingletonRule("B"),
+    "S"    : R.UnionRule("Vide", "S1", string_empty),
+    "S1"   : R.UnionRule("aTbS", "bUaS", lambda s : s[0] == "A"),
+    
+    "T"    : R.UnionRule("Vide", "aTbT", string_empty),
+    "U"    : R.UnionRule("Vide", "bUaU", string_empty),
+
+    "aTbS" : R.ProductRule("A", "TbS", "".join, sep_first),
+    # "TbS"  : R.ProductRule("T", "bS", "".join, lambda s : sep_last_char(s, "B")),
+    "TbS"  : R.ProductRule("T", "bS", "".join, lambda s : helper(s, "B")),
+    "bS"   : R.ProductRule("B", "S", "".join, sep_first),
+
+    "bUaS" : R.ProductRule("B", "UaS", "".join, sep_first),
+    "UaS"  : R.ProductRule("U", "aS", "".join, lambda s : sep_first_char(s, "A")),
+    "aS"   : R.ProductRule("A", "S", "".join, sep_first),
+
+    "aTbT" : R.ProductRule("A", "TbT", "".join, sep_first),
+    "TbT"  : R.ProductRule("T", "bT", "".join, lambda s : helper(s, "B")),
+    "bT"   : R.ProductRule("B", "T", "".join, sep_first),
+
+    "bUaU" : R.ProductRule("B", "UaU", "".join, sep_first),
+    "UaU"  : R.ProductRule("U", "aU", "".join,  lambda s : sep_last_char(s, "A")),
+    "aU"   : R.ProductRule("A", "U", "".join, sep_first),
+
+}
 
 
 """
@@ -238,14 +303,15 @@ def two_count (n):
 
 grammars = {
 
-    "treeGram"  : [treeGram, "Tree", tree_count],
-    "fiboGram"  : [fiboGram, "Fib", lambda n : fibo_count(n+2)],
-    "TwoGram"   : [TwoGram, "Two", two_count],
-    "ThreeGram" : [ThreeGram, "Three", three_count ],
-    "ABGram"    : [ABGram, "AB", lambda n: 2**n],
-    "DyckGram"  : [DyckGram, "Dyck", dyck_count],
+    "treeGram"     : [treeGram, "Tree", tree_count],
+    "fiboGram"     : [fiboGram, "Fib", lambda n : fibo_count(n+2)],
+    "TwoGram"      : [TwoGram, "Two", two_count],
+    "ThreeGram"    : [ThreeGram, "Three", three_count ],
+    "ABGram"       : [ABGram, "AB", lambda n: 2**n],
+    "DyckGram"     : [DyckGram, "Dyck", dyck_count],
     "ABPalindrome" : [ABPalindrome, "Pal", lambda x : palindrome_count(2, x) ],
     "ABCPalindrome": [ABCPalindrome, "Pal", lambda x : palindrome_count(3, x)],
+    "EqualGram"     : [EqualGram, "S", lambda x : 0 ]
  
 }
 
