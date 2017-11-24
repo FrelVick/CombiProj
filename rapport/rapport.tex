@@ -726,6 +726,10 @@ le dictionnaire car si $NonTerm("A")$ apparaît dans une règle, alors
 il doit y avoir une règle dans la grammaire condensée dont la clé est
 "A". \\
 
+La fonction dvp\_gram du fichier CRules.py prend en argument une
+grammaire condensée et retourne la grammaraire développée
+équivalente.\\
+
 Les grammaires définies dans Grammars.py ont été réécrites sous forme
 de grammaires condensées dans GrammarsC.py (pour une question de
 lisibilité, dans certains cas, les règles ne sont pas totalement
@@ -796,10 +800,36 @@ une règle $r$ .\\
 \item $Bound.rank(obj) = \sum\limits_{i = min}^{len(obj)}\ r.count(i)
   + r.rank(obj)\ avec\ len(obj)<max$
 \item $Bound.random() = Bound.unrank(random(0, Bound.count))$
-
+\end{itemize}
 
 \section {Sequence}
-Montrer traduction\\ 
-Montrer utilisation pour réécriture de DyckGram\\
 
+Le constructeur Sequence a été ajouté aux grammaires condensées dans
+le fichier CRules.py. Il prend en argument un non terminal (chaine de
+caractères), un cas vide (objet), un constructeur (fonction), et
+optionellement deux fonctions pour rank (une pour l'union et une pour
+le produit). La fonction to\_simple\_rule effectue la traduction de la
+règle telle que décrite dans l'énoncé.\\
+
+On réécrit la grammaire DyckGram en utilisant le nouveau constructeur:
+\lstset{caption={Grammaire des mots bien parenthésés}, captionpos=b} 
+\begin{lstlisting}
+DyckGram = {
+  "Dyck" : CR.Union(CR.Epsilon(""), CR.Prod(CR.NonTerm("Dyck"),
+  CR.NonTerm("Cas(u"), "".join)), 
+  "Cas(u" : CR.Prod(CR.Singleton("("), CR.NonTerm("Casu)"),
+  "".join),
+  "Casu)" :CR.Prod(CR.NonTerm("Dyck"), CR.Singleton(")"),
+  "".join)
+}
+# devient
+DyckGram = {
+  "Dyck" : CR.Sequence ("Cas(u", "", "".join ),
+  "Cas(u" : CR.Prod(CR.Singleton("("), CR.NonTerm("Casu)"),
+  "".join),
+  "Casu)" :CR.Prod(CR.NonTerm("Dyck"), CR.Singleton(")"),
+  "".join)
+}
+
+\end{lstlisting}
 \end{document}
