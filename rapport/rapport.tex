@@ -518,7 +518,7 @@ Le projet est composé de 7 fichiers, et a été développé avec Python 3.5:\\
   condensées. ?? Pas au max pour lisibilité\\
 \item Tree.py : contient la classe BinaryTree du TP3\\
 \item Project.py : contient les fonctions permettant d'initialiser les
-  grammaires et les tests\\
+  grammaires et les fonctions de tests\\
 \item Demo.ipynb : contenu similaire à Project.py sous forme de
   notebook pour la démonstration\\
   
@@ -568,7 +568,7 @@ nul, les propriétés suivantes doivent être vérifiées :
   
 \end{itemize}
 
-\section {Ajout valuation, count, random, list,  unrank}
+\section {Ajout des fonctions : valuation, count, random, list,  unrank}
 
 Pour le calcul des valuations d'une grammaire, on parcourt toutes les
 règles en mettant à jour les valuations pour les règles de type
@@ -582,13 +582,62 @@ Pour les autres fonctions (count, random, list, unrank), on implémente
 les algorithmes de l'énoncé en ajoutant des vérifications pour
 respecter la spécification décrite dans la partie précédente.
 
-\section {Ajout rank}
+?? Ajouter explication fonction unrank
 
-Montrer le code\\
-Expliquer la modification des paramètres avec valeur = None possible\\
-Expliquer comment construire les fonctions avec 2 exemples\\
--> DyckGram\\
--> AB\\
+\section {Ajout de la fonction rank}
+
+Pour ajouter la fonction rank aux grammaires on modifie les
+constructeurs des classes UnionRule et ProductRule.
+On aurait pu ajouter le nouveau paramètre au constructeur de la
+classe ConstructorRule, mais les fonctions ajoutées ayant des
+signatures différentes en fonction du cas (Union ou Product), on
+préfère ajouter le nouveau paramètre à chaque classe, pour plus de
+cohérence.\\
+
+
+Pour la classe UnionRule, le nouvel attribut est nommé
+$\_derive\_from\_first$, et correspond à une fonction qui retourne
+vrai si l'argument qui lui est passé en paramètre à été dérivé par la
+première règle qui compose l'union et faux sinon.\\
+
+
+Pour la classe ProductRule, le nouvel attribut est nommé
+$\_get\_pair$, et correspond à une fonction qui prend un mot de la
+grammaire et le sépare en une paire dans laquelle le premier (resp. second) élément
+est la partie du mot dérivée par la première (resp. seconde) règle.\\
+
+
+Afin de maintenir la possibilité de déclarer des grammaires sans avoir
+à écrire les fonctions de séparation, la fonction est un attribut
+optionnel du constructeur. L'appel à la fonction $rank$ d'une règle
+pour laquelle la fonction n'a pas été fournie provoque une exception
+de type $NotImplementedError$. \\
+
+Pour effectuer le calcul de $rank$, il est nécessaire d'avoir une
+méthode qui permet de calculer la taille d'un objet. Dans notre
+implémentation, nous utilisons la fonction python $\_\_len\_\_$ pour
+obtenir la longueur d'un objet. Il est donc nécessaire que les objets
+de la grammaire possèdent une définition pour $\_\_len\_\_$.\\
+
+L'algorithme utilisé pour le calcul de $r.rank(obj)$ est :\\
+
+\begin{itemize}
+  
+\item Si $r$ est de type $EpsilonRule$ ou $SingletonRule$ alors si
+  $obj$ est égal à l'objet passé au constructeur, on retourne 0 sinon on
+  lance une exception $ValueError$.\\
+
+\item Si $r$ est de type $UnionRule(A, B)$, alors si $obj$ dérive de
+  $A$ on retourne $A.rank(obj)$ sinon on retorune $A.count(len(obj)) +
+  B.rank(obj)$ .\\
+
+\item Si $r$ est de type $ProductRule(A, B)$, alors
+  Explication fonction rank ??
+  
+obj = (obj0, obj1) 
+\end{itemize}
+
+
 
 \section{Caching}
 Comparaison temps exec avec caching et sans\\
