@@ -586,6 +586,7 @@ respecter la spécification décrite dans la partie précédente.
 
 \section {Ajout de la fonction rank}
 
+\subsection {Ajout de rank dans Rules.py}
 Pour ajouter la fonction rank aux grammaires on modifie les
 constructeurs des classes UnionRule et ProductRule.
 On aurait pu ajouter le nouveau paramètre au constructeur de la
@@ -636,11 +637,58 @@ L'algorithme utilisé pour le calcul de $r.rank(obj)$ est :\\
   (o_{left}, o_{right})$ tels que $len(o_{left}) < len(obj_{left})$,
   auquel on ajoute le rang de $obj$ dans la classe des objets de
   taille $(left, right)$ avec la formule $A.rank(o_{left}) +
-  B.count(len(o_{right})) + B.rank(o_{right})$
+  B.count(len(o_{right})) + B.rank(o_{right})$.\\
   
 \end{itemize}
 
+\subsection{Exemple de fonctions à ajouter aux grammaires pour obtenir
+  rank}
 
+Les fonctions spécifiques aux règles des grammaires pour calculer le
+rang ont été ajoutées dans le fichier Grammars.py. On présente ici,
+trois règles pour illustrer comment écrire ces fonctions.\\
+\pagebreak
+\lstset{caption={}, captionpos=b} 
+\begin{lstlisting}
+  # Regles extraites de la grammaire des mots de Fibonacci
+
+  "Fib"   : R.UnionRule("Vide", "Cas1", lambda s : s == "")
+
+  "CasAu" : R.ProductRule("AtomA", "Fib", "".join,
+  lambda s : s = (s[0], s[1:]))
+
+  # Regle extraite le la grammaire des mots de Dyck
+
+  "Casuu" : R.ProductRule("Dyck", "Cas(u", "".join, sep_dyck)
+
+  #avec
+
+  def sep_dyck (s):
+    i_lpar = 0
+    count = 0
+    for i in range(len(s)):
+        if s[i] == "(" and count == 0:
+            i_lpar = i
+            count += 1
+        elif s[i] == "(":
+            count += 1
+        else:
+            count -= 1
+    return (s[:i_lpar], s[i_lpar:])
+
+\end{lstlisting}
+\vspace{1cm}
+\begin{itemize}
+\item Pour la règle Fib, il est simple de distinguer les cas : si le mot est
+Vide, alors il a forcément été généré par la règle vide (car Cas1 ne
+permet pas de générer le mot vide).\\
+\item Pour la règle CasAu, on remarque que la partie générée par la règle de
+gauche est toujours AtomA, donc on peut séparer le mot après le
+premier caractère.\\
+\item Pour la règle Casuu, on remarque en observant la grammaire complète
+que le mot généré par "Cas(u" commence à la dernière parenthèse
+ouvrante parmis les parenthèses situées au niveau le plus 'extérieur'
+du mot.\\
 
 \section{Caching}
 Comparaison temps exec avec caching et sans\\
@@ -648,13 +696,15 @@ Comparaison temps en fonction des fonctions mémoisées\\
 Comparaison mémoisation python2 vs python3 ?\\
 
 \section{Ajout des Grammaires Condensées}
+
+
 Expliquer traduction\\
 Création de nom de règle\\
 -> Grammaires condensées dans GrammarsC (pas totalement pour
 lisibilité)\\
 On execute les test sur les GrammarsC\\
 + Eventuellement comparaison des résultats GrammairesCondensées vs
-GrammairesNonCondensées.\\
+GrammairesNonCondensées.\\~
 
 \section{Constructeur Bound}
 Explication\\
