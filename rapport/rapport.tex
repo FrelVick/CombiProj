@@ -16,7 +16,7 @@
 	  	basicstyle=\ttfamily,
         	        keywordstyle=\color{ForestGreen}\ttfamily,
         	        stringstyle=\color{BrickRed}\ttfamily,
-        	        commentstyle=\color{Periwinkle}\ttfamily,
+        	        commentstyle=\color{RoyalPurple}\ttfamily,
         	        morecomment=[l][\color{magenta}]{\#},
                         emph={checkDefinedRules},          % Custom highlighting
                         emphstyle=\ttb\color{MidnightBlue},    
@@ -487,9 +487,9 @@ règles de la grammaire et pour chaque règle, s'il s'agit d'une règle
 de type ConstructorRule, on vérifie si les deux règles qu'elle possède
 en attributs sont définies dans la grammaire.
 
-\lstset{caption={}, captionpos=b} 
+\lstset{caption={Fonction check\_defined\_rules}, captionpos=b} 
 \begin{lstlisting}
-def checkDefinedRules (grammar):
+def check_defined_rules (grammar):
    for ruleId in grammar:
      rule = grammar[ruleId]
      if isinstance(rule, R.ConstructorRule):
@@ -648,7 +648,7 @@ Les fonctions spécifiques aux règles des grammaires pour calculer le
 rang ont été ajoutées dans le fichier Grammars.py. On présente ici,
 trois règles pour illustrer comment écrire ces fonctions.\\
 \pagebreak
-\lstset{caption={}, captionpos=b} 
+\lstset{caption={Exemple}, captionpos=b} 
 \begin{lstlisting}
   # Regles extraites de la grammaire des mots de Fibonacci
 
@@ -697,14 +697,88 @@ Comparaison mémoisation python2 vs python3 ?\\
 
 \section{Ajout des Grammaires Condensées}
 
+\subsection{Description Classe}
 
-Expliquer traduction\\
-Création de nom de règle\\
--> Grammaires condensées dans GrammarsC (pas totalement pour
-lisibilité)\\
-On execute les test sur les GrammarsC\\
-+ Eventuellement comparaison des résultats GrammairesCondensées vs
-GrammairesNonCondensées.\\~
+Les classes permettant de construire des grammaires condensées sont
+contenues dans le fichier $CRules.py$. On reprend la structure de
+classe proposée dans l'énoncé en implémentant les classes suivantes :
+ConstantCRule, dont héritent Epsilon et Singleton, ConstructorCrule
+dont héritent Union et Prod, ainsi qu'une classe NonTerm.\\
+
+Toutes les classes implémentent une fonction $to\_simple\_rule$ qui
+permet de traduire la règle condensée en une règle développée. \\
+
+Pour les classes Epsilon et Singleton, la fonction $to\_simple\_rule$
+prend en argument le dictionnaire auquel on va ajouter la règle et
+renvoie une paire composée du dictionnaire augmenté de la règle
+traduite et du nom de la règle ajoutée. La chaine de caractère choisie
+comme clé de la règle dans le dictionnaire correspond à la longueur du
+dictionnaire avant l'ajout de la règle. \\
+
+Pour les classes Prod et Union, la fonction $to\_simple\_rule$ prend
+en argument le dictionnaire et optionellement un nom pour la règle.
+On traduit chaque sous règle et on les ajoute au dictionnaire, puis
+crée une nouvelle règle à partir des règles traduites avec comme clé
+le nom fourni en argument (ou la taille du dictionnaire). \\
+
+Pour la classe NonTerm, la fonction $to\_simple\_rule$ ne modifie pas
+le dictionnaire car si $NonTerm("A")$ apparaît dans une règle, alors
+il doit y avoir une règle dans la grammaire condensée dont la clé est
+"A". \\
+
+Les grammaires définies dans Grammars.py ont été réécrites sous forme
+de grammaires condensées dans GrammarsC.py (pour une question de
+lisibilité, dans certains cas, les règles ne sont pas totalement
+condensées).
+\pagebreak
+\subsection{Exemple traduction grammaire TreeGram}
+
+\lstset{caption={Grammaire des arbres}, captionpos=b} 
+\begin{lstlisting}
+treeGram = {
+"Tree" : CR.Union(
+
+         CR.Prod(CR.NonTerm("Tree"), CR.NonTerm("Tree"),
+         lambda l : Tree.Node(l),
+         lambda t : (t.left(), t.right())),
+
+         CR.Singleton(Tree.Leaf),
+         lambda t: not (t.is_leaf()))
+}
+
+
+""" Au depart g = {} """
+
+"""
+Puis CR.Prod(CR.NonTerm("Tree"), CR.NonTerm("Tree"),
+lambda l : Tree.Node(l),
+lambda t : (t.left(), t.right()))
+est ajoutee au dictionnaire :
+    
+g = {
+  "0" : ProductRule("Tree", "Tree", lambda l : Tree.Node(l),
+  lambda t : (t.left(), t.right()))
+}
+   
+    
+CR.Singleton(Tree.Leaf),
+est ajoutee au dictionnaire
+g = {
+  "0" : ProductRule("Tree", "Tree", lambda l : Tree.Node(l),
+  lambda t : (t.left(), t.right()))
+  "1" : SingletonRule(Tree.Leaf)
+}
+    
+Enfin, CR.Prod est traduite et ajoutee au dictionnaire
+g = {
+  "0" : ProductRule("Tree", "Tree", lambda l : Tree.Node(l),
+  lambda t : (t.left(), t.right())),
+  "1" : SingletonRule(Tree.Leaf),
+  "Tree" : UnionRule("0", "1", lambda t : not (t.is_leaf()))
+}
+"""              
+\end{lstlisting}
+
 
 \section{Constructeur Bound}
 Explication\\
