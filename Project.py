@@ -5,7 +5,7 @@ import Tree
 import Grammars
 import GrammarsC as GC
 import CRules as CR
-
+import time
 
 class IncorrectGrammar(Exception):
 
@@ -72,7 +72,8 @@ fonction qui calcule la taille du langage engendré en fonction de n
 (pour les tests)
 """
 
-grammars = Grammars.grammars
+# grammars = Grammars.grammars
+grammars = GC.grammars
 
 # Récupérer un dictionnaire associant à chaque règle de la grammaire
 # sa valuation
@@ -141,79 +142,10 @@ def tests (name, gram, rule_init, card_fun, n, valuation = []):
         print ("Not passed")
 
 
+T_SIZE = 10
 for g in grammars:
-    print (grammars[g][0])
-    # grammars[g][0] = CR.dvp_gram(grammars[g][0])
+    print(g)
+    grammars[g][0] = CR.dvp_gram(grammars[g][0])
+for g in grammars:
     init_grammar(grammars[g][0])
-#     tests(g, grammars[g][0], grammars[g][1], grammars[g][2], 6)
-    print (get_valuation(grammars[g][0]))
-    # print ((grammars[g][0][grammars[g][1]]).list(1))
-
-# g = "EvenGram"
-# grammars[g][0] = CR.dvp_gram(grammars[g][0])
-# init_grammar(grammars[g][0])
-# for i in range (10):
-#     d = {}
-#     l = (grammars[g][0]["S"].list(i))
-#     print (len(l))
-#     for i in range(len(l)):
-#         if i not in d:
-#             d[i] = l[i]
-#         else:
-#             raise ValueError("doublon")
-
-        
-''' CACHING :
-pour les tests sur toutes les gram taille 7 15s vs 18s
-pour les test sur toutes les gram taille 8  1m20 vs 1m40'''
-
-''' TESTS GRAMMAIRE CONDENSEE ''' 
-
-# ng = {"Tree" : CR.Union (CR.Singleton (Tree.Leaf), 
-#                          CR.Prod(CR.NonTerm ("Tree"), CR.NonTerm ("Tree"), 
-#                                  lambda l : Tree.Node(l)))}
-
-# # Version condensée
-# DyckGram = {
-#     "Dyck" : CR.Union(CR.Epsilon(""), CR.Prod(CR.NonTerm("Dyck"), CR.NonTerm("Cas(u"), "".join)), 
-#     "Cas(u" : CR.Prod(CR.Singleton("("), CR.NonTerm("Casu)"), "".join),
-#     "Casu)" :CR.Prod(CR.NonTerm("Dyck"), CR.Singleton(")"), "".join)
-# }
-
-# Version condens# ée avec Sequence
-# DyckGram = {
-#     "Dyck" : CR.Sequence ("Cas(u", "", "".join, Grammars.string_empty, Grammars.sep_dyck),
-#     "Cas(u" : CR.Prod(CR.Singleton("("), CR.NonTerm("Casu)"), "".join, Grammars.sep_first),
-#     "Casu)" :CR.Prod(CR.NonTerm("Dyck"), CR.Singleton(")"), "".join, Grammars.sep_last)
-# }
-
-# g = CR.dvp_gram(DyckGram)
-# init_grammar(g)
-
-
-# tests("DyckGram",
-      # g, "Dyck", Grammars.dyck_count, 10)
-
-
-# gc = GC.grammars["EvenGram"][0]
-# # print(gc)
-# gc = CR.dvp_gram(gc)
-# # print(gc)
-# init_grammar(gc)
-# d = {}
-# for i in range(12):
-#     l = (gc["S"].count(i))
-#     print(l)
-
-
-
-# init_grammar(grammars["EqualGram"][0])
-# l = (grammars["EqualGram"][0]["S"].list(6))
-# for m in l:
-#     print (m)
-#     print (grammars["EqualGram"][0]["S"].rank(m))
-''' TESTS GRAMMAIRE CONDENSEE '''
-
-''' TESTS BOUND '''
-
-''' TEST SEQUENCE ''' 
+    tests(g, grammars[g][0], grammars[g][1], grammars[g][2], T_SIZE)

@@ -3,9 +3,7 @@ import Rules as R
 import Tree
 import math
 
-"""
-GRAMMAIRES
-"""
+
 # Fonctions utilisées pour permettre l'ajout de rank :
 # elles permettent de différencier quel règle est à l'origine d'un mot (dans le cas Union)
 # ou de récupérer le couple (a, b) créé par une règle product
@@ -22,37 +20,6 @@ def sep_first(s):
 def sep_last(s):
     return (s[:len(s)-1], s[len(s)-1])
 
-# Arbres binaires
-treeGram = {
-    "Tree" : R.UnionRule("Node", "Leaf", lambda t: not (t.is_leaf())),
-    "Node" : R.ProductRule("Tree", "Tree",
-                           lambda a : Tree.Node(a[0], a[1]), lambda t : (t.left(), t.right())),
-    "Leaf" : R.SingletonRule(Tree.Leaf)
-}
-
-# Mots de Fibonacci
-fiboGram = { 
-    "Fib"   : R.UnionRule("Vide", "Cas1", string_empty),
-    "Cas1"  : R.UnionRule("CasAu", "Cas2", lambda s : s[0] == "A"),
-    "Cas2"  : R.UnionRule("AtomB", "CasBAu", lambda s : s == "B"),
-    "Vide"  : R.EpsilonRule(""),
-    "CasAu" : R.ProductRule("AtomA", "Fib", "".join, sep_first), 
-    "AtomA" : R.SingletonRule("A"),
-    "AtomB" : R.SingletonRule("B"),
-    "CasBAu": R.ProductRule("AtomB", "CasAu", "".join, sep_first)
-}
-
-# Mots sur l'alphabet AB
-ABGram = {
-    "AB" : R.UnionRule("Vide", "CasAB", string_empty),
-    "AtomA" : R.SingletonRule("A"),
-    "AtomB" : R.SingletonRule("B"),
-    "CasAB" : R.UnionRule("CasAu", "CasBu", lambda s :  s[0] == 'A'),
-    "Vide" : R.EpsilonRule(""),
-    "CasAu" : R.ProductRule("AtomA", "AB", "".join, sep_first),
-    "CasBu" : R.ProductRule("AtomB", "AB", "".join, sep_first)
-}
-
 def sep_dyck (s):
     i_lpar = 0
     count = 0
@@ -65,9 +32,49 @@ def sep_dyck (s):
         else:
             count -= 1
     return (s[:i_lpar], s[i_lpar:])
-            
 
-#  Mots de Dyck
+
+"""
+GRAMMAIRES
+"""
+
+''' ARBRES BINAIRES '''
+
+treeGram = {
+    "Tree" : R.UnionRule("Node", "Leaf", lambda t: not (t.is_leaf())),
+    "Node" : R.ProductRule("Tree", "Tree",
+                           lambda a : Tree.Node(a[0], a[1]), lambda t : (t.left(), t.right())),
+    "Leaf" : R.SingletonRule(Tree.Leaf)
+}
+
+
+''' MOTS DE FIBONNACI '''
+
+fiboGram = { 
+    "Fib"   : R.UnionRule("Vide", "Cas1", string_empty),
+    "Cas1"  : R.UnionRule("CasAu", "Cas2", lambda s : s[0] == "A"),
+    "Cas2"  : R.UnionRule("AtomB", "CasBAu", lambda s : s == "B"),
+    "Vide"  : R.EpsilonRule(""),
+    "CasAu" : R.ProductRule("AtomA", "Fib", "".join, sep_first), 
+    "AtomA" : R.SingletonRule("A"),
+    "AtomB" : R.SingletonRule("B"),
+    "CasBAu": R.ProductRule("AtomB", "CasAu", "".join, sep_first)
+}
+
+''' MOTS SUR L'ALPHABET A, B '''
+
+ABGram = {
+    "AB" : R.UnionRule("Vide", "CasAB", string_empty),
+    "AtomA" : R.SingletonRule("A"),
+    "AtomB" : R.SingletonRule("B"),
+    "CasAB" : R.UnionRule("CasAu", "CasBu", lambda s :  s[0] == 'A'),
+    "Vide" : R.EpsilonRule(""),
+    "CasAu" : R.ProductRule("AtomA", "AB", "".join, sep_first),
+    "CasBu" : R.ProductRule("AtomB", "AB", "".join, sep_first)
+}
+            
+''' MOTS DE DYCK '''
+
 DyckGram = {
     "Dyck" : R.UnionRule("Vide", "Casuu", string_empty),
     "Casuu" : R.ProductRule("Dyck", "Cas(u", "".join, sep_dyck),
@@ -78,7 +85,9 @@ DyckGram = {
     "Casu)" : R.ProductRule("Dyck", "AtomRPAR", "".join, sep_last)
 }
 
-# Mots qui n'ont pas deux lettres consécutives égales
+
+''' MOTS QUI N'ONT PAS DEUX LETTRES CONSECUTIVES EGALES '''
+
 TwoGram = {
     "Two" : R.UnionRule("CasAu", "CasBAu", lambda s: s[0] == 'A'),
     "Vide" : R.EpsilonRule(""),
@@ -90,7 +99,8 @@ TwoGram = {
     "CasBAu" : R.ProductRule("AtomB", "CasAu", "".join, sep_first),
 }
 
-# Mots qui n'ont pas trois lettres consécutives égales
+''' MOTS QUI N'ONT PAS TROIS LETTRES CONSECUTIVES EGALES '''
+
 ThreeGram = {
     "Three" : R.UnionRule("Vide", "S", string_empty),
     "Vide" : R.EpsilonRule(""),
@@ -111,7 +121,8 @@ ThreeGram = {
     "BBU"  : R.ProductRule("AtomB", "BU", "".join, sep_first),
 }
 
-# Palindromes sur l'alphabet A, B
+''' PALINDROMES SUR L'ALPHABET A, B '''
+
 ABPalindrome = {
     "Pal" : R.UnionRule("Vide", "S", string_empty),
     "Vide" : R.EpsilonRule(""),
@@ -130,7 +141,8 @@ ABPalindrome = {
  
 }
 
-# Palindromes sur l'alphabet A, B, C
+''' PALINDROMES SUR L'ALPHABET A, B, C '''
+
 ABCPalindrome = {
     "Pal" : R.UnionRule("Vide", "S", string_empty),
     "Vide" : R.EpsilonRule(""),
@@ -154,57 +166,7 @@ ABCPalindrome = {
     "CSC1"  : R.ProductRule("Pal", "AtomC", "".join, sep_last),
 }
 
-def sep_first_char (s, c):
-    print("First Char")
-    # if s == c:
-    #     return (c,"")
-  
-    for i in range (len(s)):
-        print ("test", s[i], c, i)
-        if s[i] == c:
-            print (s[:i], s[i:])
-            if i > 0:
-                return (s[:i+1], s[i+1:])
-            return(s[:i], s[i:])
-
-def sep_last_char (s, c):
-    print("Last char", s , c)
-    # if s == c:
-    #     return ("", c)
-    
-    for i in range (len(s) - 1, -1, -1):
-        print ("test", s[i], c)
-        if s[i] == c:
-            print (s[:i], s[i:])
-            if i > 0:
-                return (s[:i+1], s[i+1:])
-            return(s[:i], s[i:])
-
-def helper (s, c):
-    print (s, c, "helper")
-    if s == c:
-        return ("", s)
-    if s[0] == c:
-        print (s[0], s[1:])
-        return ("", s)
-        return (s[0], s[1:])
-    else:
-        print (s[:len(s)-1], s[len(s)-1])
-        return (s[:len(s)-1], s[len(s)-1])
-        return (s, "")
-
-# def rev_helper (s, c):
-#     print (s, c, "rec")
-#     if s == c:
-#         return ("", s)
-#     if s[0] == c:
-#         print (s[0], s[1:])
-#         return ("", s)
-#         return (s[0], s[1:])
-#     else:
-#         print (s[:len(s)-1], s[len(s)-1])
-#         return (s[:len(s)-1], s[len(s)-1])
-#         return (s, "")
+''' MOTS QUI ONT LE MEME NOMBRE DE A QUE DE B '''
 
 EqualGram = {
     "Vide" : R.EpsilonRule(""),
@@ -217,7 +179,6 @@ EqualGram = {
     "U"    : R.UnionRule("Vide", "bUaU", string_empty),
 
     "aTbS" : R.ProductRule("A", "TbS", "".join, sep_first),
-    # "TbS"  : R.ProductRule("T", "bS", "".join, lambda s : sep_last_char(s, "B")),
     "TbS"  : R.ProductRule("T", "bS", "".join, lambda s : helper(s, "B")),
     "bS"   : R.ProductRule("B", "S", "".join, sep_first),
 
@@ -240,7 +201,9 @@ EqualGram = {
 FONCTIONS CARDINALITE (pour les tests) 
 """
 
+
 def fibo_count(n, d = {}):
+    ''' Pour la grammaire des mots de Fibonacci ''' 
     if (n < 0):
         raise ValueError("Negative number")
     elif (n <= 1):
@@ -265,12 +228,14 @@ def catalan (n):
     return num//den
 
 def dyck_count (n):
+    ''' Pour la grammaire des mots de Dyck '''
     if n % 2 == 0:
         return catalan (n//2)
     else:
         return 0
 
 def tree_count (n):
+    ''' Pour la grammaire des arbres '''
     if n == 0:
         return 0
     else:
@@ -278,6 +243,7 @@ def tree_count (n):
         return math.factorial(2*(n-1))//(f*f*n)
 
 def palindrome_count (base, n):
+    ''' Pour les grammaires des palindromes '''
     if n == 0:
         return 1
     elif n <= 2:
@@ -286,6 +252,7 @@ def palindrome_count (base, n):
         return base ** ((n+1)//2)
 
 def three_count (n):
+    ''' Pour la grammaires des mots n'ayant pas trois lettres consécutives égales '''
     if n == 0:
         return 1
     if n == 1:
@@ -297,6 +264,7 @@ def three_count (n):
     return three_count(n-1) + three_count(n-2)
 
 def two_count (n):
+    ''' Pour la grammaire des mots n'ayant pas deux lettres consécutives égales '''
     if n == 0:
         return 1
     return 2
@@ -311,13 +279,16 @@ grammars = {
     "DyckGram"     : [DyckGram, "Dyck", dyck_count],
     "ABPalindrome" : [ABPalindrome, "Pal", lambda x : palindrome_count(2, x) ],
     "ABCPalindrome": [ABCPalindrome, "Pal", lambda x : palindrome_count(3, x)],
-    "EqualGram"     : [EqualGram, "S", lambda x : 0 ]
+    "EqualGram"    : [EqualGram, "S", lambda x : 0 ]
  
 }
 
+
 def get_rule_init (g, name):
+    ''' Retourne la règle initiale de la grammaire '''
     return g[name][0][g[name][1]]
 
 def print_grammar(g):
+    ''' Affiche la grammaire '''
     for rule in g:
         print(rule+" : "+str(g[rule]))
