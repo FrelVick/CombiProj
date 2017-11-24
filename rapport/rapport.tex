@@ -781,11 +781,22 @@ g = {
 
 
 \section{Constructeur Bound}
-Explication\\
-- list concat\\
-- count sum\\
-- unrank et rank\\
-Créer tests ?\\
+
+La classe Bound a été ajouté dans le fichier Rules.py. Le constructeur
+Bound prend en argument deux entiers min et max (avec min $<$ max) et
+une règle $r$ .\\
+
+
+\begin{itemize}
+\item $Bound.count() = \sum\limits_{i = min}^{max}\ r.count(i)$
+\item $Bound.list () = \sum\limits_{i = min}^{max}\ r.list(i)$ (ici,
+  $\sum$ correspond à la concaténation de listes)
+\item  $Bound.unrank(n) = r.unrank(j, n - $\sum\limits_{i = min}^{j-1}
+  count(i)$) avec j le plus petit entier tel que $\sum\limits_{i = min}^j count(i) \geq n$
+\item $Bound.rank(obj) = \sum\limits_{i = min}^{len(obj)}\ r.count(i)
+  + r.rank(obj)\ avec\ len(obj)<max$
+\item $Bound.random() = Bound.unrank(random(0, Bound.count))$
+
 
 \section {Sequence}
 Montrer traduction\\ 
