@@ -631,10 +631,13 @@ L'algorithme utilisé pour le calcul de $r.rank(obj)$ est :\\
   $A$ on retourne $A.rank(obj)$ sinon on retorune $A.count(len(obj)) +
   B.rank(obj)$ .\\
 
-\item Si $r$ est de type $ProductRule(A, B)$, alors
-  Explication fonction rank ??
+\item Si $r$ est de type $ProductRule(A, B)$, avec $obj = (obj_{left},
+  obj_{right})$ alors on calcule le nombre d'objets $o =
+  (o_{left}, o_{right})$ tels que $len(o_{left}) < len(obj_{left})$,
+  auquel on ajoute le rang de $obj$ dans la classe des objets de
+  taille $(left, right)$ avec la formule $A.rank(o_{left}) +
+  B.count(len(o_{right})) + B.rank(o_{right})$
   
-obj = (obj0, obj1) 
 \end{itemize}
 
 
