@@ -54,7 +54,7 @@ DyckGram = {
 ''' MOTS QUI N'ONT PAS DEUX LETTRES CONSECUTIVES EGALES '''
 
 TwoGram = {
-    "Two" : CR.Union(CR.NonTerm("CasAu"), CR.NonTerm("CasBAu"), lambda s: s[0] == 'A'),
+    "Two" : CR.Union(CR.NonTerm("CasAu"), CR.NonTerm("CasBAu"), lambda s: s=='' or s[0] == 'A'),
     "CasAu" : CR.Union (CR.Epsilon(""), CR.NonTerm("CasABu"), G.string_empty),
     "CasABu": CR.Prod(CR.Singleton("A"), CR.NonTerm("CasBu"), "".join, G.sep_first),
     "CasBu" : CR.Union (CR.NonTerm("CasBAu"), CR.Epsilon(""), lambda s : not G.string_empty(s)),
@@ -137,8 +137,8 @@ EqualGram = {
 
 
 
-grammars = {
-    "EqualGram" : [EqualGram, "S", lambda n : n],
+grammarsC = {
+    "EqualGram" : [EqualGram, "S", G.equal_count],
     "treeGram"  : [treeGram, "Tree", G.tree_count],
     "fiboGram"  : [fiboGram, "Fib", lambda n : G.fibo_count(n+2)],
     "ABGram"    : [ABGram, "AB", lambda n: 2**n],

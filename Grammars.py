@@ -89,7 +89,7 @@ DyckGram = {
 ''' MOTS QUI N'ONT PAS DEUX LETTRES CONSECUTIVES EGALES '''
 
 TwoGram = {
-    "Two" : R.UnionRule("CasAu", "CasBAu", lambda s: s[0] == 'A'),
+    "Two" : R.UnionRule ("CasAu", "CasBAu", lambda s: s=='' or s[0] == 'A'),
     "Vide" : R.EpsilonRule(""),
     "AtomA" : R.SingletonRule("A"),
     "AtomB" : R.SingletonRule("B"),
@@ -179,19 +179,19 @@ EqualGram = {
     "U"    : R.UnionRule("Vide", "bUaU", string_empty),
 
     "aTbS" : R.ProductRule("A", "TbS", "".join, sep_first),
-    "TbS"  : R.ProductRule("T", "bS", "".join, lambda s : helper(s, "B")),
+    "TbS"  : R.ProductRule("T", "bS", "".join),
     "bS"   : R.ProductRule("B", "S", "".join, sep_first),
 
     "bUaS" : R.ProductRule("B", "UaS", "".join, sep_first),
-    "UaS"  : R.ProductRule("U", "aS", "".join, lambda s : sep_first_char(s, "A")),
+    "UaS"  : R.ProductRule("U", "aS", "".join),
     "aS"   : R.ProductRule("A", "S", "".join, sep_first),
 
     "aTbT" : R.ProductRule("A", "TbT", "".join, sep_first),
-    "TbT"  : R.ProductRule("T", "bT", "".join, lambda s : helper(s, "B")),
+    "TbT"  : R.ProductRule("T", "bT", "".join),
     "bT"   : R.ProductRule("B", "T", "".join, sep_first),
 
     "bUaU" : R.ProductRule("B", "UaU", "".join, sep_first),
-    "UaU"  : R.ProductRule("U", "aU", "".join,  lambda s : sep_last_char(s, "A")),
+    "UaU"  : R.ProductRule("U", "aU", "".join),
     "aU"   : R.ProductRule("A", "U", "".join, sep_first),
 
 }
@@ -269,6 +269,15 @@ def two_count (n):
         return 1
     return 2
 
+def central_binomial(n):
+    num = math.factorial(n)
+    return math.factorial(2*n) // (num * num)
+
+def equal_count (n):
+    if n % 2 == 1:
+        return 0
+    return central_binomial(n//2)
+
 grammars = {
 
     "treeGram"     : [treeGram, "Tree", tree_count],
@@ -279,7 +288,7 @@ grammars = {
     "DyckGram"     : [DyckGram, "Dyck", dyck_count],
     "ABPalindrome" : [ABPalindrome, "Pal", lambda x : palindrome_count(2, x) ],
     "ABCPalindrome": [ABCPalindrome, "Pal", lambda x : palindrome_count(3, x)],
-    "EqualGram"    : [EqualGram, "S", lambda x : 0 ]
+    "EqualGram"    : [EqualGram, "S", equal_count ]
  
 }
 

@@ -73,7 +73,7 @@ fonction qui calcule la taille du langage engendré en fonction de n
 """
 
 # grammars = Grammars.grammars
-grammars = GC.grammars
+grammars = GC.grammarsC
 
 # Récupérer un dictionnaire associant à chaque règle de la grammaire
 # sa valuation
@@ -144,7 +144,6 @@ def tests (name, gram, rule_init, card_fun, n, valuation = []):
 
 T_SIZE = 10
 for g in grammars:
-    print(g)
     grammars[g][0] = CR.dvp_gram(grammars[g][0])
 for g in grammars:
     init_grammar(grammars[g][0])
