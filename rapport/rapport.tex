@@ -12,6 +12,7 @@
 \usepackage{color}
 \usepackage{colortbl} 
 \usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
 \lstset{language=python,
 	  	basicstyle=\ttfamily,
         	        keywordstyle=\color{ForestGreen}\ttfamily,
@@ -31,13 +32,14 @@
 \renewcommand{\lstlistlistingname}{List of \lstlistingname s}
 
 
-\title{Rapport projet Combinatoire}      
-\author{-}         
-\date{-}          
+\title{Rapport Projet Combinatoire}      
+\author{Samia Nabili\\Travail réalisé en binôme avec Viktor Frelikh}         
 
                               
 \begin{document}
-%% \maketitle
+{\let\newpage\relax\maketitle}
+
+\maketitle
 
 \section{Réponses attendues pour la méthode count}
 Pour la grammaire des arbres :
@@ -175,7 +177,6 @@ AtomB & $\mathcal{E}$ & AtomA*Fib & A & B & AtomB*CasAu\\
 \end{tabular}
 \end{table}
 
-\newpage
 \subsection{Mots de Dyck}
 \begin{table}[!hbt]
 \centering
@@ -422,7 +423,7 @@ AtomB * BSB1 & Pal * AtomB & AtomC * CSC1 & Pal * AtomC\\
 \hline
 \end{tabular}
 \end{table}
-
+\pagebreak
 \subsection{Mots sur A,B qui contiennent autant de A que de B}
 
 \begin{table}[!hbt]
@@ -513,9 +514,9 @@ Le projet est composé de 7 fichiers, et a été développé avec Python 3.5:\\
   grammaire une liste qui contient la grammaire, la première règle de
   la grammaire et une fonction qui calcule la cardinalité.\\
 \item CRules.py : contient les classes permettant d'implémenter les
-  grammaires condensées (plus de détails dans la partie ??\\
+  grammaires condensées\\
 \item GrammarsC.py : contient les déclarations de grammaires
-  condensées. ?? Pas au max pour lisibilité\\
+  condensées.\\
 \item Tree.py : contient la classe BinaryTree du TP3\\
 \item Project.py : contient les fonctions permettant d'initialiser les
   grammaires et les fonctions de tests\\
@@ -563,8 +564,15 @@ nul, les propriétés suivantes doivent être vérifiées :
   
 \item S'il existe une suite $U_n$ qui dénombre les objets de la
   grammaire, alors $\forall n \geq 0$, on doit avoir $U_n =
-  r.count(n)$\\
-  ?? AJOUTER GRAMMAIRE -> SUITES OEIS
+  r.count(n)$ (les fonctions qui calculent ces suites sont dans le
+  fichier Grammar.py).\\
+
+  ThreeGram : \url{https://oeis.org/A128588}\\
+  TreeGram  : \url{https://oeis.org/A000108}\\
+  ABPalindrome : \url{https://oeis.org/A163403}\\
+  EqualGram : \url{https://oeis.org/A126869}\\
+  DyckGram  : \url{https://oeis.org/A126120}\\
+  ABGram    : 2^{n} \\
   
 \end{itemize}
 
@@ -582,7 +590,6 @@ Pour les autres fonctions (count, random, list, unrank), on implémente
 les algorithmes de l'énoncé en ajoutant des vérifications pour
 respecter la spécification décrite dans la partie précédente.
 
-?? Ajouter explication fonction unrank
 
 \section {Ajout de la fonction rank}
 
@@ -641,13 +648,13 @@ L'algorithme utilisé pour le calcul de $r.rank(obj)$ est :\\
   
 \end{itemize}
 
+\pagebreak
 \subsection{Exemple de fonctions à ajouter aux grammaires pour obtenir
   rank}
 
 Les fonctions spécifiques aux règles des grammaires pour calculer le
 rang ont été ajoutées dans le fichier Grammars.py. On présente ici,
 trois règles pour illustrer comment écrire ces fonctions.\\
-\pagebreak
 \lstset{caption={Exemple}, captionpos=b} 
 \begin{lstlisting}
   # Regles extraites de la grammaire des mots de Fibonacci
@@ -766,14 +773,13 @@ Les grammaires définies dans Grammars.py ont été réécrites sous forme
 de grammaires condensées dans GrammarsC.py (pour une question de
 lisibilité, dans certains cas, les règles ne sont pas totalement
 condensées).
-\pagebreak
 \subsection{Exemple traduction grammaire TreeGram}
 
 \lstset{caption={Grammaire des arbres}, captionpos=b} 
 \begin{lstlisting}
 treeGram = {
 "Tree" : CR.Union(
-
+ 
          CR.Prod(CR.NonTerm("Tree"), CR.NonTerm("Tree"),
          lambda l : Tree.Node(l),
          lambda t : (t.left(), t.right())),
@@ -781,11 +787,7 @@ treeGram = {
          CR.Singleton(Tree.Leaf),
          lambda t: not (t.is_leaf()))
 }
-
-
-""" Au depart g = {} """
-
-"""
+""" Au depart g = {} 
 Puis CR.Prod(CR.NonTerm("Tree"), CR.NonTerm("Tree"),
 lambda l : Tree.Node(l),
 lambda t : (t.left(), t.right()))
@@ -795,8 +797,6 @@ g = {
   "0" : ProductRule("Tree", "Tree", lambda l : Tree.Node(l),
   lambda t : (t.left(), t.right()))
 }
-   
-    
 CR.Singleton(Tree.Leaf),
 est ajoutee au dictionnaire
 g = {
@@ -804,7 +804,6 @@ g = {
   lambda t : (t.left(), t.right()))
   "1" : SingletonRule(Tree.Leaf)
 }
-    
 Enfin, CR.Prod est traduite et ajoutee au dictionnaire
 g = {
   "0" : ProductRule("Tree", "Tree", lambda l : Tree.Node(l),
