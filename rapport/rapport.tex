@@ -10,8 +10,8 @@
 \usepackage[section]{placeins}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{colortbl} 
 \usepackage[dvipsnames]{xcolor}
-
 \lstset{language=python,
 	  	basicstyle=\ttfamily,
         	        keywordstyle=\color{ForestGreen}\ttfamily,
@@ -691,9 +691,41 @@ ouvrante parmis les parenthèses situées au niveau le plus 'extérieur'
 du mot.\\
 
 \section{Caching}
-Comparaison temps exec avec caching et sans\\
-Comparaison temps en fonction des fonctions mémoisées\\
-Comparaison mémoisation python2 vs python3 ?\\
+
+Nous avons utilisé deux méthodes de caching différentes.
+La première est compatible avec python2 et consisite à écrire des
+fonctions de memoïsation dont le nom peut etre utilisé comme
+décorateur avant la déclaration de la fonction à mémoiser et la
+seconde est la solution proposée dans la version python 3.5
+@lru\_cache.\\
+
+Le tableau suivant présente les durées d'exécution obtenues (moyenne
+sur 4 exécutions) pour la grammaire des arbres, avec des objets de taille 9.
+
+\begin{table}[!hbt]
+\centering
+\small
+\setlength\tabcolsep{2pt}
+\begin{tabular}{|c||c|c|c|}
+\hline $Fonction$ & Sans mémoisation & Mémoisation Python2 &  Mémoisation Python3\\
+\hline
+\hline
+
+count & 0.0689 & 3.9517e-05 &  2.7775e-05\\
+rank & 40.1041 & 8.2734 & 33.1834 \\
+unrank & 136.8276 & 26.4209 & 111.1100\\
+rank (avec count memoïsé) & \cellcolor{gray} & 0.1138 & 0.08194\\
+unrank (avec count memoïsé) & \cellcolor{gray} & 0.0178 & 0.02971\\
+\hline
+\end{tabular}
+\end{table}
+
+On remarque que la fonction ayant le plus d'impact sur les
+performances est la fonction count, ce qui s'explique par les
+nombreux appels que font rank et unrank à cette fonction. Les
+résultats illustrent l'intérêt d'utiliser le caching puisqu'il
+permet de réduire jusqu'à 100 fois le temps d'éxecution pour la
+fonction rank de cet exemple.
 
 \section{Ajout des Grammaires Condensées}
 

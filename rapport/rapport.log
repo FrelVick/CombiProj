@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.11.14)  24 NOV 2017 16:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.11.14)  24 NOV 2017 18:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -470,6 +470,20 @@ File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
 Package color Info: Driver file: pdftex.def on input line 143.
 )
+(/usr/share/texlive/texmf-dist/tex/latex/colortbl/colortbl.sty
+Package: colortbl 2012/02/13 v1.0a Color table columns (DPC)
+
+(/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
+Package: array 2014/10/28 v2.4c Tabular extension package (FMi)
+\col@sep=\dimen120
+\extrarowheight=\dimen121
+\NC@list=\toks22
+\extratabsurround=\skip49
+\backup@length=\skip50
+)
+\everycr=\toks23
+\minrowclearance=\skip51
+)
 (/usr/share/texmf/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2007/01/21 v2.11 LaTeX color extensions (UK)
 
@@ -556,16 +570,16 @@ Package: hhline 2014/10/28 v2.03 Table rule package (DPC)
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count103
-\scratchdimen=\dimen120
+\scratchdimen=\dimen122
 \scratchbox=\box28
 \nofMPsegments=\count104
 \nofMParguments=\count105
-\everyMPshowfont=\toks22
+\everyMPshowfont=\toks24
 \MPscratchCnt=\count106
-\MPscratchDim=\dimen121
+\MPscratchDim=\dimen123
 \MPnumerator=\count107
 \makeMPintoPDFobject=\count108
-\everyMPtoPDFconversion=\toks23
+\everyMPtoPDFconversion=\toks25
 ) (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
 )
@@ -624,7 +638,7 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 162.
 
-Overfull \hbox (5.1768pt too wide) in paragraph at lines 162--176
+Overfull \hbox (6.37679pt too wide) in paragraph at lines 162--176
  [][] 
  []
 
@@ -640,28 +654,9 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-! Extra }, or forgotten $.
-<template> \unskip \hfil }
-                          \hskip \tabcolsep \endtemplate 
-l.188 &``(`` & ``)'' $ &
-                         LPAR * Casu) & Dyck * RPAR \\
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.188 &``(`` & ``)'' $ &
-                         LPAR * Casu) & Dyck * RPAR \\
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-! Missing } inserted.
-<inserted text> 
-                }
 l.188 &``(`` & ``)'' $ &
                          LPAR * Casu) & Dyck * RPAR \\
 I've inserted something that you may have forgotten.
@@ -671,17 +666,17 @@ really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
 
-Overfull \hbox (17.67802pt too wide) in paragraph at lines 262--285
+Overfull \hbox (18.878pt too wide) in paragraph at lines 262--285
  [][] 
  []
 
 [3]
-Overfull \hbox (31.92798pt too wide) in paragraph at lines 358--375
+Overfull \hbox (33.12796pt too wide) in paragraph at lines 358--375
  [][] 
  []
 
 [4]
-Overfull \hbox (31.92798pt too wide) in paragraph at lines 407--424
+Overfull \hbox (33.12796pt too wide) in paragraph at lines 407--424
  [][] 
  []
 
@@ -707,7 +702,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 507--509
 
  []
 
-
+[6]
 Underfull \hbox (badness 10000) in paragraph at lines 509--515
 
  []
@@ -737,7 +732,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 522--524
 
  []
 
-[6]
+
 Underfull \hbox (badness 10000) in paragraph at lines 532--534
 
  []
@@ -782,7 +777,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 557--559
 
  []
 
-
+[7]
 Underfull \hbox (badness 10000) in paragraph at lines 560--563
 
  []
@@ -803,7 +798,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 590--597
 
  []
 
-[7]
+
 Underfull \hbox (badness 10000) in paragraph at lines 599--603
 
  []
@@ -823,7 +818,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 617--622
 
  []
 
-
+[8]
 Underfull \hbox (badness 10000) in paragraph at lines 623--624
 
  []
@@ -843,7 +838,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 635--641
 
  []
 
-[8]
+[9]
 Underfull \hbox (badness 10000) in paragraph at lines 682--685
 
  []
@@ -859,73 +854,73 @@ Underfull \hbox (badness 10000) in paragraph at lines 688--692
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 694--697
+Underfull \hbox (badness 10000) in paragraph at lines 695--701
 
  []
 
-[9]
-Overfull \hbox (0.71011pt too wide) in paragraph at lines 702--707
+[10]
+Overfull \hbox (0.71011pt too wide) in paragraph at lines 734--739
 \OT1/cmr/m/n/10 chier $\OML/cmm/m/it/10 CRules:py$\OT1/cmr/m/n/10 . On re-prend
  la struc-ture de classe pro-pos^^See dans l'^^Senonc^^Se en impl^^Sementant
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 702--707
+Underfull \hbox (badness 10000) in paragraph at lines 734--739
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 708--710
+Underfull \hbox (badness 10000) in paragraph at lines 740--742
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 711--717
+Underfull \hbox (badness 10000) in paragraph at lines 743--749
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 718--723
+Underfull \hbox (badness 10000) in paragraph at lines 750--755
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 724--728
+Underfull \hbox (badness 10000) in paragraph at lines 756--760
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 729--732
+Underfull \hbox (badness 10000) in paragraph at lines 761--764
 
  []
 
-[10]
-Underfull \hbox (badness 10000) in paragraph at lines 789--792
+[11] [12]
+Underfull \hbox (badness 10000) in paragraph at lines 821--824
 
  []
 
-[11]
+[13]
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.798 ... $Bound.unrank(n) = r.unrank(j, n - $\sum
+l.830 ... $Bound.unrank(n) = r.unrank(j, n - $\sum
                                                   \limits_{i = min}^{j-1}
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
 
-Overfull \hbox (2.77464pt too wide) in paragraph at lines 807--813
+Overfull \hbox (2.77464pt too wide) in paragraph at lines 839--845
 []\OT1/cmr/m/n/10 Le construc-teur Se-quence a ^^Set^^Se ajout^^Se aux gram-mai
 res condens^^Sees dans le fi-chier CRules.py.
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 807--813
+Underfull \hbox (badness 10000) in paragraph at lines 839--845
 
  []
 
 
-Overfull \hbox (17.1814pt too wide) in paragraph at lines 818--819
+Overfull \hbox (17.1814pt too wide) in paragraph at lines 850--851
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][] 
  []
@@ -937,25 +932,25 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.835 \end{document}
+l.867 \end{document}
                     
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
-[12] (./rapport.aux) )
+[14] (./rapport.aux) )
 (\end occurred inside a group at level 1)
 
 ### semi simple group (level 1) entered at line 681 (\begingroup)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 5835 strings out of 493029
- 78123 string characters out of 6136233
- 200703 words of memory out of 5000000
- 9299 multiletter control sequences out of 15000+600000
+ 5917 strings out of 493029
+ 79159 string characters out of 6136233
+ 202613 words of memory out of 5000000
+ 9375 multiletter control sequences out of 15000+600000
  6841 words of font info for 25 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 38i,10n,40p,288b,1236s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,11n,40p,288b,1236s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
 mbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.
 pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></
@@ -968,10 +963,10 @@ pe1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
 blic/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
 sfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmtt10.pfb>
-Output written on rapport.pdf (12 pages, 176116 bytes).
+Output written on rapport.pdf (14 pages, 181473 bytes).
 PDF statistics:
- 91 PDF objects out of 1000 (max. 8388607)
- 64 compressed objects within 1 object stream
+ 98 PDF objects out of 1000 (max. 8388607)
+ 69 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
